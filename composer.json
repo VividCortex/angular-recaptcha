@@ -1,0 +1,14 @@
+{
+    "name": "vividcortex/angular-recaptcha",
+    "description": "An AngularJS directive that allows you to use a reCaptcha widget inside a form",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Miguel Trias",
+            "email": "miguel@vividcortex.com"
+        }
+    ],
+    "require": {
+
+    }
+}
