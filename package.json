@@ -1,0 +1,13 @@
+{
+  "name": "angular-recaptcha",
+  "version": "0.0.1",
+  "description": "This directive allows you to use a reCaptcha widget inside an AngularJS form",
+  "author": "VividCortex",
+  "license": "MIT",
+  "homepage": "https://github.com/vividcortex/angular-recaptcha",
+  "main": "src/vc-recaptcha.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vividcortex/angular-recaptcha.git"
+  }
+}
