@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="testApp">
+<html lang="en" ng-app="testApp" ng-controller="testCtrl">
     <head>
         <title>VividCortex reCaptcha Directive Example</title>
 
@@ -16,6 +16,21 @@
         <!-- define your app and make it depend on ngRecaptcha -->
         <script>
             app = angular.module('testApp', ['vcRecaptcha']);
+
+            app.controller('testCtrl', function ($scope, vcRecaptchaService) {
+                console.log('controller');
+
+                $scope.submit = function () {
+                    console.log('submit');
+
+                    // Server side validation
+                    // ...
+                    // ...
+
+                    // In case of a failed validation you need to reload the captcha because each challenge can be validated once
+                    vcRecaptchaService.reload();
+                }
+            });
         </script>
 
     </head>
@@ -32,6 +47,9 @@
                 theme="clean"
                 key="--- REPLACE HERE YOUR PUBLIC KEY !!! ----"
             ></div>
+
+            <!-- Calls some method in the scope to handle data submit -->
+            <button class="btn" ng-click="submit()">Submit</button>
         </form>
 
         <!-- use the model.captcha value in your controllers to submit the result to the server and validate -->

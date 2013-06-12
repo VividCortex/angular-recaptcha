@@ -1,8 +1,31 @@
-(function (ng){
+(function (ng, Recaptcha){
 
     var app = ng.module('vcRecaptcha', []);
 
-    app.directive('vcRecaptcha', ['$log', '$timeout', function ($log, $timeout) {
+    app.service('vcRecaptchaService', ['$timeout', '$log', function ($timeout, $log) {
+
+        var callback;
+
+        return {
+            create: function (elm, key, fn, conf) {
+                conf.callback = fn;
+                callback = fn;
+                Recaptcha.create(key,
+                    elm,
+                    conf
+                );
+            },
+            reload: function () {
+                // $log.info('Reloading captcha');
+                Recaptcha.reload();
+
+                // Since the previous call is asynch, we need again the same hack. See directive code.
+                $timeout(callback, 1000);
+            }
+        }
+    }]);
+
+    app.directive('vcRecaptcha', ['$log', '$timeout', 'vcRecaptchaService', function ($log, $timeout, vcRecaptchaService) {
 
         return {
             restrict: 'A',
@@ -50,16 +73,17 @@
                     },
                     reloadHandler = Recaptcha.reload;
 
-                Recaptcha.create(attrs.key,
+                vcRecaptchaService.create(
                     elm[0],
+                    attrs.key,
+                    callback,
                     {
-                        theme:    attrs.theme,
                         tabindex: attrs.tabindex,
-                        callback: callback
+                        theme:    attrs.theme
                     }
                 );
             }
         };
     }]);
 
-}(angular));
+}(angular, Recaptcha));
