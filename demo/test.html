@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="testApp">
+    <head>
+        <title>VividCortex reCaptcha Directive Example</title>
+
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+
+        <!-- Include the JS ReCaptcha API -->
+        <script type="text/javascript" src="https://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+
+        <!-- Include ngReCaptcha -->
+        <script src="vc-recaptcha.js"></script>
+
+        <!-- define your app and make it depend on ngRecaptcha -->
+        <script>
+            app = angular.module('testApp', ['vcRecaptcha']);
+        </script>
+
+    </head>
+    <body>
+    <div class="container">
+
+        <h1>VividCortex reCaptcha Directive Example</h1>
+
+        <form>
+            <div
+                vc-recaptcha
+                ng-model="model.captcha"
+                tabindex="3"
+                theme="clean"
+                key="--- REPLACE HERE YOUR PUBLIC KEY !!! ----"
+            ></div>
+        </form>
+
+        <!-- use the model.captcha value in your controllers to submit the result to the server and validate -->
+        <div>
+            <pre>{{ model.captcha }}</pre>
+        </div>
+
+    </div>
+    </body>
+</html>
