@@ -79,7 +79,8 @@
                     callback,
                     {
                         tabindex: attrs.tabindex,
-                        theme:    attrs.theme
+                        theme:    attrs.theme,
+                        lang:     attrs.lang || null
                     }
                 );
             }
