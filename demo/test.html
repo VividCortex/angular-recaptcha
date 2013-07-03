@@ -21,14 +21,21 @@
                 console.log('controller');
 
                 $scope.submit = function () {
-                    console.log('submit');
+                    var valid;
 
-                    // Server side validation
-                    // ...
-                    // ...
+                    console.log('sending the captcha response to the server');
 
-                    // In case of a failed validation you need to reload the captcha because each challenge can be validated once
-                    vcRecaptchaService.reload();
+                    // You need to implement your server side validation here.
+                    // Send the model.captcha object to the server and use some of the server side APIs to validate it
+                    // See https://developers.google.com/recaptcha/docs/
+
+                    if (valid) {
+                        console.log('success')
+
+                    } else {
+                        // In case of a failed validation you need to reload the captcha because each challenge can be checked just once
+                        vcRecaptchaService.reload();
+                    }
                 }
             });
         </script>
