@@ -34,6 +34,10 @@
 
                 // $log.info("Creating recaptcha with theme=%s and key=%s", attrs.theme, attrs.key);
 
+                if (!attrs.hasOwnProperty('key') || attrs.key.length < 40) {
+                    throw 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
+                }
+
                 var
                     inputs, response, challenge,
                     refresh = function () {
