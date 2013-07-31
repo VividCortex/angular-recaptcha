@@ -3,17 +3,19 @@
     <head>
         <title>VividCortex reCaptcha Directive Example</title>
 
+        <!-- Bootstrap is NOT required, it's just here to make the example look better -->
         <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 
+        <!-- Include AngularJS -->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 
         <!-- Include the JS ReCaptcha API -->
         <script type="text/javascript" src="https://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 
-        <!-- Include ngReCaptcha -->
-        <script src="../release/angular-recaptcha.min.js"></script>
+        <!-- Include the ngReCaptcha directive -->
+        <script src="./angular-recaptcha.min.js"></script>
 
-        <!-- define your app and make it depend on ngRecaptcha -->
+        <!-- define your app and make it depend on vcRecaptcha module -->
         <script>
             var app = angular.module('testApp', ['vcRecaptcha']);
 
@@ -23,16 +25,18 @@
                 $scope.submit = function () {
                     var valid;
 
-                    console.log('sending the captcha response to the server');
+                    console.log('sending the captcha response to the server', $scope.model.captcha);
 
                     // You need to implement your server side validation here.
                     // Send the model.captcha object to the server and use some of the server side APIs to validate it
                     // See https://developers.google.com/recaptcha/docs/
 
                     if (valid) {
-                        console.log('success');
+                        console.log('Success');
 
                     } else {
+                        console.log('Failed validation');
+
                         // In case of a failed validation you need to reload the captcha because each challenge can be checked just once
                         vcRecaptchaService.reload();
                     }
