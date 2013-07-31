@@ -1,6 +1,9 @@
-
+# IDE Files
 .idea/*
 
-/vendor/
-
+# OS Files
 .DS_Store
+
+# Node, Grunt, general build process files
+bower_components/*
+node_modules/*
