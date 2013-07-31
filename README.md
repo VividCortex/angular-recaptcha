@@ -7,7 +7,7 @@ Use this directive to be able to submit with XHR a form that contains a reCaptch
 Demo
 ====
 
-See demo/test.html for an usage example. Keep in mind that the captcha only works from a domain and with a correct re-captcha key, so this file wont work if you just load it in your browser.
+See demo/test.html for an usage example. Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file wont work if you just load it in your browser.
 
 
 Usage
@@ -34,9 +34,9 @@ In this case we are mapping the captcha data to the scope property ```model.capt
 }
 ```
 
-This object contains the two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the response.
+This object contains the two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the captcha that your user resolved.
 
-To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/docs/) or [roll your own](https://developers.google.com/recaptcha/docs/verify).
+To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify).
 
 
 Other Parameters
