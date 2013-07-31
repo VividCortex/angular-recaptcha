@@ -7,22 +7,30 @@ Use this directive to be able to submit with XHR a form that contains a reCaptch
 Demo
 ====
 
-See demo/test.html for an usage example. Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file wont work if you just load it in your browser.
+See demo/test.html for an usage example.
+
+Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file wont work if you just load it in your browser.
 
 
 Usage
 =====
 
-You need first to get a valid public key for your domain. See http://www.google.com/recaptcha.
+First, you need to get a valid public key for your domain. See http://www.google.com/recaptcha.
 
-Then, in your view, you need to place a container for the captcha:
+Then, include the reCaptcha [AJAX API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
 
 ```html
-    <div
-        vc-recaptcha
-        ng-model="model.captcha"
-        key="---- YOUR PUBLIC KEY GOES HERE ----"
-    ></div>
+<script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+```
+
+After that, in your view, you can place a container for the captcha and call the vc-recaptcha directive like this:
+
+```html
+<div
+    vc-recaptcha
+    ng-model="model.captcha"
+    key="---- YOUR PUBLIC KEY GOES HERE ----"
+></div>
 ```
 
 In this case we are mapping the captcha data to the scope property ```model.captcha```. If you inspect the value of this roperty you'll see something like:
@@ -36,7 +44,7 @@ In this case we are mapping the captcha data to the scope property ```model.capt
 
 This object contains the two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the captcha that your user resolved.
 
-To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify).
+To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify). Validations is outside of the scope of this tool, since is mandatory to do that at the server side.
 
 
 Other Parameters
@@ -56,3 +64,9 @@ You can optionally pass other parameters to the captcha, as html attributes:
 ```
 
 In this case we are specifying that the captcha should use the theme named 'clean', display the texts in english language and the captcha input should have tabindex 3.
+
+
+Recent Changelog
+================
+
+The release is now built using [GruntJS](gruntjs.com) so if you were using the source files (the ```src``` directory) in your projects you should now use the files in the release directory.
