@@ -15,9 +15,9 @@
                     conf
                 );
             },
-            reload: function () {
+            reload: function (t) {
                 // $log.info('Reloading captcha');
-                Recaptcha.reload();
+                Recaptcha.reload(t);
 
                 // Since the previous call is asynch, we need again the same hack. See directive code.
                 $timeout(callback, 1000);
