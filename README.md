@@ -7,7 +7,7 @@ Use this directive to be able to submit with XHR a form that contains a reCaptch
 Demo
 ====
 
-See demo/test.html for an usage example.
+See [the demo file](demo/demo.html) for an usage example.
 
 Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file wont work if you just load it in your browser.
 
@@ -23,7 +23,7 @@ Then, include the reCaptcha [AJAX API](https://developers.google.com/recaptcha/d
 <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 ```
 
-After that, in your view, you can place a container for the captcha and call the vc-recaptcha directive like this:
+After that, in your view, you can place a container for the captcha and call the vc-recaptcha directive like this (Be careful to use your public key, not your private one.):
 
 ```html
 <div
