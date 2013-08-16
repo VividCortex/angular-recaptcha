@@ -1,6 +1,7 @@
 {
     "name": "vc-angular-recaptcha",
-    "version": "0.0.1",
+    "version": "0.0.5",
+    "main": "release/angular-recaptcha.js",
     "ignore": [
         "**/.*",
         "node_modules",
