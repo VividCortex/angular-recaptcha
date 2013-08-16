@@ -4,6 +4,6 @@
 # OS Files
 .DS_Store
 
-# Node, Grunt, general build process files
+# Node, Grunt, Bower, general build process files
 bower_components/*
 node_modules/*

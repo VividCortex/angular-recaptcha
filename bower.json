@@ -1,0 +1,12 @@
+{
+    "name": "vc-angular-recaptcha",
+    "version": "0.0.1",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "angular": "1.*"
+    }
+}
