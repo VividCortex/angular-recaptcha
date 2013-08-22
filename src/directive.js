@@ -63,7 +63,10 @@
                     {
                         tabindex: attrs.tabindex,
                         theme:    attrs.theme,
-                        lang:     attrs.lang || null
+                        lang:     attrs.lang || null,
+                        callback: function () {
+                            $log.log("Captcha was reloaded", arguments);
+                        }
                     }
                 );
             }
