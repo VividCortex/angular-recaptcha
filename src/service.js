@@ -25,8 +25,9 @@
              * @param conf the captcha object configuration
              */
             create: function (elm, key, fn, conf) {
-                conf.callback = fn;
                 callback = fn;
+
+                conf.callback = fn;
                 Recaptcha.create(
                     key,
                     elm,
@@ -37,15 +38,21 @@
             /**
              * Reloads the captcha (updates the challenge)
              *
-             * @param should_focus pass TRUE if the repatcha should gain the focus after reloading
+             * @param should_focus pass TRUE if the recaptcha should gain the focus after reloading
              */
             reload: function (should_focus) {
+
                 // $log.info('Reloading captcha');
                 Recaptcha.reload(should_focus && 't');
 
-                // Since the previous call is asynch, we need again the same hack. See directive code.
-                // TODO: Investigate another way to know when the new captcha is loaded
+                /**
+                 * Since the previous call is asynch, we need again the same hack. See directive code.
+                 * @TODO Investigate another way to know when the new captcha is loaded
+                 * @see https://github.com/VividCortex/angular-recaptcha/issues/4
+                 * @see https://groups.google.com/forum/#!topic/recaptcha/6b7k866qzD0
+                 */
                 $timeout(callback, 1000);
+            },
 
             data: function () {
                 return {
