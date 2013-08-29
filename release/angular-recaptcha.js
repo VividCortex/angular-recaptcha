@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2013-07-31 
+ * angular-recaptcha build:2013-08-28 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2013 VividCortex 
 **/
@@ -10,7 +10,11 @@
 
     ng.module('vcRecaptcha', []);
 
+
 }(angular));
+
+
+
 
 /*global angular, Recaptcha */
 (function (ng, Recaptcha) {
@@ -39,8 +43,9 @@
              * @param conf the captcha object configuration
              */
             create: function (elm, key, fn, conf) {
-                conf.callback = fn;
                 callback = fn;
+
+                conf.callback = fn;
                 Recaptcha.create(
                     key,
                     elm,
@@ -51,15 +56,27 @@
             /**
              * Reloads the captcha (updates the challenge)
              *
-             * @param should_focus pass TRUE if the repatcha should gain the focus after reloading
+             * @param should_focus pass TRUE if the recaptcha should gain the focus after reloading
              */
             reload: function (should_focus) {
+
                 // $log.info('Reloading captcha');
                 Recaptcha.reload(should_focus && 't');
 
-                // Since the previous call is asynch, we need again the same hack. See directive code.
-                // TODO: Investigate another way to know when the new captcha is loaded
+                /**
+                 * Since the previous call is asynch, we need again the same hack. See directive code.
+                 * @TODO Investigate another way to know when the new captcha is loaded
+                 * @see https://github.com/VividCortex/angular-recaptcha/issues/4
+                 * @see https://groups.google.com/forum/#!topic/recaptcha/6b7k866qzD0
+                 */
                 $timeout(callback, 1000);
+            },
+
+            data: function () {
+                return {
+                    response:  Recaptcha.get_response(),
+                    challenge: Recaptcha.get_challenge()
+                };
             }
         };
 
@@ -77,7 +94,7 @@
 
         return {
             restrict: 'A',
-            require: 'ngModel',
+            require: '?ngModel',
             link: function (scope, elm, attrs, ctrl) {
 
                 // $log.info("Creating recaptcha with theme=%s and key=%s", attrs.theme, attrs.key);
@@ -87,14 +104,16 @@
                 }
 
                 var
-                    inputs, response, challenge,
+                    response_input, challenge_input,
                     refresh = function () {
-                        ctrl.$setViewValue({response: response.val(), challenge: challenge.val()});
+                        if (ctrl) {
+                            ctrl.$setViewValue({response: response_input.val(), challenge: challenge_input.val()});
+                        }
                     },
                     reload = function () {
-                        inputs    = elm.find('input');
-                        challenge = angular.element(inputs[0]); // #recaptcha_challenge_field
-                        response  = angular.element(inputs[1]); // #recaptcha_response_field
+                        var inputs      = elm.find('input');
+                        challenge_input = angular.element(inputs[0]); // #recaptcha_challenge_field
+                        response_input  = angular.element(inputs[1]); // #recaptcha_response_field
                         refresh();
                     },
                     callback = function () {
@@ -102,15 +121,17 @@
 
                         reload();
 
-                        response.bind('keyup', function () {
+                        response_input.bind('keyup', function () {
                             scope.$apply(refresh);
                         });
 
                         // model -> view
-                        ctrl.$render = function () {
-                            response.val(ctrl.$viewValue.response);
-                            challenge.val(ctrl.$viewValue.challenge);
-                        };
+                        if (ctrl) {
+                            ctrl.$render = function () {
+                                response_input.val(ctrl.$viewValue.response);
+                                challenge_input.val(ctrl.$viewValue.challenge);
+                            };
+                        }
 
                         // Capture the click even when the user requests for a new captcha
                         // We give some time for the new captcha to render
@@ -132,7 +153,10 @@
                     {
                         tabindex: attrs.tabindex,
                         theme:    attrs.theme,
-                        lang:     attrs.lang || null
+                        lang:     attrs.lang || null,
+                        challenge_callback: function () {
+                            $log.log("Captcha was reloaded", arguments);
+                        }
                     }
                 );
             }
