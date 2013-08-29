@@ -8,7 +8,7 @@
 
         return {
             restrict: 'A',
-            require: 'ngModel',
+            require: '?ngModel',
             link: function (scope, elm, attrs, ctrl) {
 
                 // $log.info("Creating recaptcha with theme=%s and key=%s", attrs.theme, attrs.key);
@@ -21,6 +21,8 @@
                     inputs, response, challenge,
                     refresh = function () {
                         ctrl.$setViewValue({response: response.val(), challenge: challenge.val()});
+                        if (ctrl) {
+                        }
                     },
                     reload = function () {
                         inputs    = elm.find('input');
@@ -42,6 +44,8 @@
                             response.val(ctrl.$viewValue.response);
                             challenge.val(ctrl.$viewValue.challenge);
                         };
+                        if (ctrl) {
+                        }
 
                         // Capture the click even when the user requests for a new captcha
                         // We give some time for the new captcha to render

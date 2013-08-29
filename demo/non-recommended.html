@@ -3,17 +3,17 @@
     <head>
         <title>VividCortex reCaptcha Directive Example</title>
 
-        <!-- Bootstrap is NOT required, it's just here to make the example look better -->
+        <!-- Bootstrap is NOT required, it's just here to make the demo look better -->
         <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
 
         <!-- Include AngularJS -->
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"></script>
 
         <!-- Include the JS ReCaptcha API -->
-        <script type="text/javascript" src="https://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 
         <!-- Include the ngReCaptcha directive -->
-        <script src="./angular-recaptcha.min.js"></script>
+        <script src="./angular-recaptcha.js"></script>
 
         <!-- define your app and make it depend on vcRecaptcha module -->
         <script>
@@ -50,16 +50,18 @@
 
         <h1>VividCortex reCaptcha Directive Example</h1>
 
+        <p>This is a <b>non recommended setup</b>. It generally works but we are relying on a hack that might fail in low bandwidth situations. See the directive code for more info.</p>
+
         <form>
             <div
                 vc-recaptcha
                 ng-model="model.captcha"
                 tabindex="3"
                 theme="clean"
-                key="--- REPLACE HERE YOUR PUBLIC KEY !!! ----"
+                key="=== REPLACE THIS WITH YOUR PUBLIC KEY ==="
             ></div>
 
-            <!-- Call some method in the scope to handle data submit -->
+            <!-- Call a method in the scope of your controller to handle data submit -->
             <button class="btn" ng-click="submit()">Submit</button>
         </form>
 
