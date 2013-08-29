@@ -18,16 +18,16 @@
                 }
 
                 var
-                    inputs, response, challenge,
+                    response_input, challenge_input,
                     refresh = function () {
-                        ctrl.$setViewValue({response: response.val(), challenge: challenge.val()});
                         if (ctrl) {
+                            ctrl.$setViewValue({response: response_input.val(), challenge: challenge_input.val()});
                         }
                     },
                     reload = function () {
-                        inputs    = elm.find('input');
-                        challenge = angular.element(inputs[0]); // #recaptcha_challenge_field
-                        response  = angular.element(inputs[1]); // #recaptcha_response_field
+                        var inputs      = elm.find('input');
+                        challenge_input = angular.element(inputs[0]); // #recaptcha_challenge_field
+                        response_input  = angular.element(inputs[1]); // #recaptcha_response_field
                         refresh();
                     },
                     callback = function () {
@@ -35,16 +35,16 @@
 
                         reload();
 
-                        response.bind('keyup', function () {
+                        response_input.bind('keyup', function () {
                             scope.$apply(refresh);
                         });
 
                         // model -> view
-                        ctrl.$render = function () {
-                            response.val(ctrl.$viewValue.response);
-                            challenge.val(ctrl.$viewValue.challenge);
-                        };
                         if (ctrl) {
+                            ctrl.$render = function () {
+                                response_input.val(ctrl.$viewValue.response);
+                                challenge_input.val(ctrl.$viewValue.challenge);
+                            };
                         }
 
                         // Capture the click even when the user requests for a new captcha
