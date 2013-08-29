@@ -46,6 +46,12 @@
                 // Since the previous call is asynch, we need again the same hack. See directive code.
                 // TODO: Investigate another way to know when the new captcha is loaded
                 $timeout(callback, 1000);
+
+            data: function () {
+                return {
+                    response:  Recaptcha.get_response(),
+                    challenge: Recaptcha.get_challenge()
+                };
             }
         };
 
