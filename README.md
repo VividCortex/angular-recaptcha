@@ -7,7 +7,7 @@ Use this directive to be able to submit with XHR a form that contains a reCaptch
 Demo
 ====
 
-See [the demo file](demo/recommended.html) for an usage example.
+See [the demo file](demo/reccommended.html) for an usage example.
 
 Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file wont work if you just load it in your browser.
 
