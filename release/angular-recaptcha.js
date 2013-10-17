@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2013-08-28 
+ * angular-recaptcha build:2013-10-17 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2013 VividCortex 
 **/
@@ -10,11 +10,7 @@
 
     ng.module('vcRecaptcha', []);
 
-
 }(angular));
-
-
-
 
 /*global angular, Recaptcha */
 (function (ng, Recaptcha) {
@@ -77,6 +73,10 @@
                     response:  Recaptcha.get_response(),
                     challenge: Recaptcha.get_challenge()
                 };
+            },
+
+            destroy: function() {
+                Recaptcha.destroy();
             }
         };
 
@@ -153,10 +153,7 @@
                     {
                         tabindex: attrs.tabindex,
                         theme:    attrs.theme,
-                        lang:     attrs.lang || null,
-                        challenge_callback: function () {
-                            $log.log("Captcha was reloaded", arguments);
-                        }
+                        lang:     attrs.lang || null
                     }
                 );
             }
