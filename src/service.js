@@ -59,6 +59,10 @@
                     response:  Recaptcha.get_response(),
                     challenge: Recaptcha.get_challenge()
                 };
+            },
+
+            destroy: function() {
+                Recaptcha.destroy();
             }
         };
 
