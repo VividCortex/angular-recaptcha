@@ -1,7 +1,7 @@
 {
     "name": "vc-angular-recaptcha",
     "version": "0.0.7",
-    "keywords": "angular captcha recaptcha vividcortex human form validation signup security login"
+    "keywords": "angular captcha recaptcha vividcortex human form validation signup security login",
     "main": "release/angular-recaptcha.js",
     "ignore": [
         "**/.*",
