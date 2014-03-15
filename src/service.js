@@ -60,6 +60,12 @@
                     challenge: Recaptcha.get_challenge()
                 };
             },
+            formData: function () {
+                var fd = new FormData();
+                fd.append( 'recaptcha_challenge_field', Recaptcha.get_challenge() );
+                fd.append( 'recaptcha_response_field', Recaptcha.get_response() );
+                return fd;
+            },
 
             destroy: function() {
                 Recaptcha.destroy();
