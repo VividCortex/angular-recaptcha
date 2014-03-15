@@ -44,6 +44,9 @@ In this case we are mapping the captcha data to the scope property ```model.capt
 
 This object contains the two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the captcha that your user resolved.
 
+The data can also be retrieved from ```vcRecaptchaService```, using the ```.data()``` method (returns the same as above), or the ```.formData()``` method (returns an FormData object with ```recaptcha_response_field``` and ```recaptcha_challenge_field```).
+
+
 To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify). Validations is outside of the scope of this tool, since is mandatory to do that at the server side.
 
 
@@ -60,10 +63,13 @@ You can optionally pass other parameters to the captcha, as html attributes:
         theme="clean"
         lang="en"
         key="---- YOUR PUBLIC KEY GOES HERE ----"
+        keyExpr=" key_in_scope "
     ></div>
 ```
 
 In this case we are specifying that the captcha should use the theme named 'clean', display the texts in english language and the captcha input should have tabindex 3.
+
+You only need one of `key` and `keyExpr`, `key` has priority.
 
 
 Recent Changelog
