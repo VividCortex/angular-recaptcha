@@ -4,16 +4,23 @@
 
     var app = ng.module('vcRecaptcha');
 
-    app.directive('vcRecaptcha', ['$log', '$timeout', 'vcRecaptchaService', function ($log, $timeout, vcRecaptchaService) {
+    app.directive('vcRecaptcha', ['$log', '$timeout', 'vcRecaptchaService', '$parse', function ($log, $timeout, vcRecaptchaService, $parse) {
 
         return {
             restrict: 'A',
             require: '?ngModel',
             link: function (scope, elm, attrs, ctrl) {
 
-                // $log.info("Creating recaptcha with theme=%s and key=%s", attrs.theme, attrs.key);
+                var key = "";
+                if (attrs.hasOwnProperty('key')) {
+                    key = attrs.key;
+                } else if (attrs.hasOwnProperty('keyExpr')) {
+                    key = $parse(attrs.keyExpr)(scope);
+                }
 
-                if (!attrs.hasOwnProperty('key') || attrs.key.length !== 40) {
+                // $log.info("Creating recaptcha with theme=%s and key=%s", attrs.theme, key);
+
+                if (key.length !== 40) {
                     throw 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
                 }
 
@@ -62,7 +69,7 @@
 
                 vcRecaptchaService.create(
                     elm[0],
-                    attrs.key,
+                    key,
                     callback,
                     {
                         tabindex: attrs.tabindex,
