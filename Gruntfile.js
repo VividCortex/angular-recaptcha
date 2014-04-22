@@ -28,6 +28,11 @@ module.exports = function (grunt) {
                 src:  'release/<%= pkg.name %>.js',
                 dest: 'release/<%= pkg.name %>.min.js'
             }
+        },
+        bump: {
+            options: {
+                files: ['package.json', 'bower.json']
+            }
         }
     });
 
