@@ -22,14 +22,21 @@
             app.controller('testCtrl', function ($scope, vcRecaptchaService) {
                 console.log("this is your app's controller");
 
+                $scope.model = {
+                    key: '=== REPLACE THIS WITH YOUR PUBLIC ReCaptcha KEY ==='
+                };
+
                 $scope.submit = function () {
                     var valid;
 
+                    /**
+                     * SERVER SIDE VALIDATION
+                     *
+                     * You need to implement your server side validation here.
+                     * Send the model.captcha object to the server and use some of the server side APIs to validate it
+                     * See https://developers.google.com/recaptcha/docs/
+                     */
                     console.log('sending the captcha response to the server', vcRecaptchaService.data());
-
-                    // You need to implement your server side validation here.
-                    // Send the model.captcha object to the server and use some of the server side APIs to validate it
-                    // See https://developers.google.com/recaptcha/docs/
 
                     if (valid) {
                         console.log('Success');
@@ -50,7 +57,7 @@
 
         <h1>VividCortex reCaptcha Directive Example</h1>
         <p>
-            This the <b>reccomended</b> way of using the reCaptcha directive.
+            This the <b>recommended</b> way of using the reCaptcha directive.
             Instead of using ng-model to get the challenge and response, you use a service.
             This way it's safer because we don't depend on a timeout hack that we are currently using in the directive.
         </p>
@@ -60,7 +67,7 @@
                 vc-recaptcha
                 tabindex="3"
                 theme="clean"
-                key="=== REPLACE THIS WITH YOUR PUBLIC KEY ==="
+                key="model.key"
             ></div>
 
             <!-- Call a method in the scope of your controller to handle data submit -->

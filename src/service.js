@@ -28,6 +28,7 @@
                 callback = fn;
 
                 conf.callback = fn;
+
                 Recaptcha.create(
                     key,
                     elm,
