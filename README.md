@@ -7,7 +7,7 @@ Use this directive to be able to submit with XHR a form that contains a reCaptch
 Demo
 ====
 
-See [the demo file](demo/reccommended.html) for an usage example.
+See [the demo file](demo/usage.html) for an usage example.
 
 Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file wont work if you just load it in your browser.
 
@@ -23,17 +23,19 @@ Then, include the reCaptcha [AJAX API](https://developers.google.com/recaptcha/d
 <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 ```
 
-After that, in your view, you can place a container for the captcha and call the vc-recaptcha directive like this (Be careful to use your public key, not your private one.):
+After that, in your view, you can place a container for the captcha widget and call the vc-recaptcha directive like this (Be careful to use your public key, not your private one.):
 
 ```html
 <div
     vc-recaptcha
-    ng-model="model.captcha"
-    key="---- YOUR PUBLIC KEY GOES HERE ----"
+    key="'---- YOUR PUBLIC KEY GOES HERE ----'"
 ></div>
 ```
 
-In this case we are mapping the captcha data to the scope property ```model.captcha```. If you inspect the value of this roperty you'll see something like:
+Here the `key` attribute is passed to the directive's scope, so you can use a property in your scope or just a string
+
+To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify). Validations is outside of the scope of this tool, since is mandatory to do that at the server side.
+To get the values that you need to send to your server, use the `vcRecaptchaService` angular service. This object contains a `data()` method that returns two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the captcha that your user resolved.
 
 ```json
 {
@@ -41,11 +43,6 @@ In this case we are mapping the captcha data to the scope property ```model.capt
     "challenge": "03AHJ_VuvQ5p0AdejIw4W6yUKA65eRIEFiXFTxtKYD22UH9zjavXK4IYRZ8fhaGHjKXLKZa2MA-Lqeui5V9aeRWWTZSN6e1tED4gt7O77ROTcyY0Uedkc7LHzSUbLNULMcbXb2JThqLgOMvHINaoOtoniW4CepuOLG2h8s0tRUfqaQt6iUqNeWWHQ"
 }
 ```
-
-This object contains the two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the captcha that your user resolved.
-
-To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify). Validations is outside of the scope of this tool, since is mandatory to do that at the server side.
-
 
 Other Parameters
 ================
@@ -59,7 +56,7 @@ You can optionally pass other parameters to the captcha, as html attributes:
         tabindex="3"
         theme="clean"
         lang="en"
-        key="---- YOUR PUBLIC KEY GOES HERE ----"
+        key="'---- YOUR PUBLIC KEY GOES HERE ----'"
     ></div>
 ```
 
