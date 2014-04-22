@@ -1,6 +1,6 @@
 {
   "name": "angular-recaptcha",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "description": "An AngularJS directive that allows you to use a reCaptcha widget inside a form",
   "author": "VividCortex",
   "license": "MIT",
