@@ -34,6 +34,7 @@ module.exports = function (grunt) {
     // Load the plugin that provides the needed tasks.
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-bump');
 
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify']);
