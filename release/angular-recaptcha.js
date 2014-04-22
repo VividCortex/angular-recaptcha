@@ -1,7 +1,7 @@
 /**
- * angular-recaptcha build:2013-10-17 
+ * angular-recaptcha build:2014-04-22 
  * https://github.com/vividcortex/angular-recaptcha 
- * Copyright (c) 2013 VividCortex 
+ * Copyright (c) 2014 VividCortex 
 **/
 
 /*global angular, Recaptcha */
@@ -42,6 +42,7 @@
                 callback = fn;
 
                 conf.callback = fn;
+
                 Recaptcha.create(
                     key,
                     elm,
@@ -95,27 +96,37 @@
         return {
             restrict: 'A',
             require: '?ngModel',
+            scope: {
+                key: '='
+            },
             link: function (scope, elm, attrs, ctrl) {
 
                 // $log.info("Creating recaptcha with theme=%s and key=%s", attrs.theme, attrs.key);
 
-                if (!attrs.hasOwnProperty('key') || attrs.key.length !== 40) {
-                    throw 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
-                }
-
                 var
-                    response_input, challenge_input,
+                    captcha_created = false,
+
+                    response_input,
+
+                    challenge_input,
+
                     refresh = function () {
                         if (ctrl) {
-                            ctrl.$setViewValue({response: response_input.val(), challenge: challenge_input.val()});
+                            ctrl.$setViewValue({
+                                response: response_input.val(),
+                                challenge: challenge_input.val()
+                            });
                         }
                     },
+
                     reload = function () {
                         var inputs      = elm.find('input');
                         challenge_input = angular.element(inputs[0]); // #recaptcha_challenge_field
                         response_input  = angular.element(inputs[1]); // #recaptcha_response_field
                         refresh();
                     },
+
+
                     callback = function () {
                         // $log.info('Captcha rendered');
 
@@ -144,18 +155,37 @@
                             }, 1000);
                         });
                     },
+
                     reloadHandler = Recaptcha.reload;
 
-                vcRecaptchaService.create(
-                    elm[0],
-                    attrs.key,
-                    callback,
-                    {
-                        tabindex: attrs.tabindex,
-                        theme:    attrs.theme,
-                        lang:     attrs.lang || null
+
+                if (!attrs.hasOwnProperty('key')) {
+                    throw 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
+                }
+
+                scope.$watch('key', function (key, old) {
+
+                    if (key && !captcha_created) {
+
+                        if (key.length !== 40) {
+                            throw 'The "key" should be set to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
+                        }
+
+                        vcRecaptchaService.create(
+                            elm[0],
+                            scope.key,
+                            callback,
+                            {
+                                tabindex: attrs.tabindex,
+                                theme:    attrs.theme,
+                                lang:     attrs.lang || null
+                            }
+                        );
+
+                        captcha_created = true;
                     }
-                );
+
+                });
             }
         };
     }]);
