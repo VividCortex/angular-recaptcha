@@ -31,9 +31,20 @@ module.exports = function (grunt) {
         },
         bump: {
             options: {
-                files: ['package.json', 'bower.json']
+                files: ['package.json', 'bower.json'],
+                updateConfigs: ['pkg'],
+                commit: true,
+                commitMessage: '[release]',
+                commitFiles: ['package.json', 'bower.json'],
+                createTag: true,
+                tagName: '%VERSION%',
+                tagMessage: '%VERSION%',
+                push: true,
+                pushTo: 'origin',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe'
             }
-        }
+        },
+
     });
 
     // Load the plugin that provides the needed tasks.
