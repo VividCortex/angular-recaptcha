@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2014-04-22 
+ * angular-recaptcha build:2014-08-11 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2014 VividCortex 
 **/
@@ -78,6 +78,20 @@
 
             destroy: function() {
                 Recaptcha.destroy();
+            },
+
+            switch_type: function (type) {
+                if( 'image' === type || 'audio' === type ) {
+                    Recaptcha.switch_type(type);
+                }
+            },
+
+            showhelp: function () {
+                Recaptcha.showhelp();
+            },
+
+            focus_response_field: function() {
+                Recaptcha.focus_response_field();
             }
         };
 

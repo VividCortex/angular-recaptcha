@@ -64,6 +64,20 @@
 
             destroy: function() {
                 Recaptcha.destroy();
+            },
+
+            switch_type: function (type) {
+                if( 'image' === type || 'audio' === type ) {
+                    Recaptcha.switch_type(type);
+                }
+            },
+
+            showhelp: function () {
+                Recaptcha.showhelp();
+            },
+
+            focus_response_field: function() {
+                Recaptcha.focus_response_field();
             }
         };
 
