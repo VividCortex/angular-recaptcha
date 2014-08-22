@@ -52,7 +52,7 @@
                  * @see https://github.com/VividCortex/angular-recaptcha/issues/4
                  * @see https://groups.google.com/forum/#!topic/recaptcha/6b7k866qzD0
                  */
-                $timeout(callback, 1000);
+                $timeout(callback, 200);
             },
 
             data: function () {

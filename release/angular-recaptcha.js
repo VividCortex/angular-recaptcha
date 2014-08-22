@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2014-08-11 
+ * angular-recaptcha build:2014-08-22 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2014 VividCortex 
 **/
@@ -66,7 +66,7 @@
                  * @see https://github.com/VividCortex/angular-recaptcha/issues/4
                  * @see https://groups.google.com/forum/#!topic/recaptcha/6b7k866qzD0
                  */
-                $timeout(callback, 1000);
+                $timeout(callback, 200);
             },
 
             data: function () {
@@ -111,7 +111,8 @@
             restrict: 'A',
             require: '?ngModel',
             scope: {
-                key: '='
+                key: '=',
+                callback: '='
             },
             link: function (scope, elm, attrs, ctrl) {
 
@@ -166,8 +167,13 @@
                             // $log.info('clicked');
                             $timeout(function () {
                                 scope.$apply(reload);
-                            }, 1000);
+                            }, 200);
                         });
+
+                        //Fire the custom callback function if specified
+                        if (scope.callback && {}.toString.call(scope.callback) === '[object Function]') {
+                            scope.callback();
+                        }
                     },
 
                     reloadHandler = Recaptcha.reload;

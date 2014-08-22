@@ -57,6 +57,7 @@ You can optionally pass other parameters to the captcha, as html attributes:
         theme="clean"
         lang="en"
         key="'---- YOUR PUBLIC KEY GOES HERE ----'"
+        callback="'---- YOUR CUSTOM CALLBACK FUNCTION ----'"
     ></div>
 ```
 
@@ -66,6 +67,7 @@ In this case we are specifying that the captcha should use the theme named 'clea
 Recent Changelog
 ================
 
+- 1.0.3 - added custom callback method to the directive, for anyone that would need to use it if needed, and reduced the timeout to 200ms from 1s.
 - 1.0.2 - added extra `Recaptcha` object methods to the service, i.e. `switch_type`, `showhelp`, etc.
 - 1.0.0 - the `key` attribute is now a scope property of the directive
 - Added the ```destroy()``` method to the service. Thanks to @endorama.

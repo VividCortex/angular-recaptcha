@@ -10,7 +10,8 @@
             restrict: 'A',
             require: '?ngModel',
             scope: {
-                key: '='
+                key: '=',
+                callback: '='
             },
             link: function (scope, elm, attrs, ctrl) {
 
@@ -65,8 +66,13 @@
                             // $log.info('clicked');
                             $timeout(function () {
                                 scope.$apply(reload);
-                            }, 1000);
+                            }, 200);
                         });
+
+                        //Fire the custom callback function if specified
+                        if (scope.callback && {}.toString.call(scope.callback) === '[object Function]') {
+                            scope.callback();
+                        }
                     },
 
                     reloadHandler = Recaptcha.reload;
