@@ -23,7 +23,18 @@ Then, include the reCaptcha [AJAX API](https://developers.google.com/recaptcha/d
 <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 ```
 
-After that, in your view, you can place a container for the captcha widget and call the vc-recaptcha directive like this (Be careful to use your public key, not your private one.):
+Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
+
+```html
+<script type="text/javascript" src="angular-recaptcha.js"></script>
+```
+
+```javascript
+var app = angular.module('myApp', ['vcRecaptcha']);
+```
+
+
+After that, you can place a container for the captcha widget in your view, and call the `vc-recaptcha` directive on it like this:
 
 ```html
 <div
@@ -32,7 +43,7 @@ After that, in your view, you can place a container for the captcha widget and c
 ></div>
 ```
 
-Here the `key` attribute is passed to the directive's scope, so you can use a property in your scope or just a string
+Here the `key` attribute is passed to the directive's scope, so you can use either a property in your scope or just a hardcoded string. Be careful to use your public key, not your private one.
 
 To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify). Validations is outside of the scope of this tool, since is mandatory to do that at the server side.
 To get the values that you need to send to your server, use the `vcRecaptchaService` angular service. This object contains a `data()` method that returns two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the captcha that your user resolved.
