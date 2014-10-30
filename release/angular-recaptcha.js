@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2014-08-11 
+ * angular-recaptcha build:2014-10-30 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2014 VividCortex 
 **/
