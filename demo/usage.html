@@ -4,13 +4,13 @@
         <title>VividCortex reCaptcha Directive Example</title>
 
         <!-- Bootstrap is NOT required, it's just here to make the demo look better -->
-        <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Include AngularJS -->
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.js"></script>
 
         <!-- Include the JS ReCaptcha API -->
-        <script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+        <script src="//www.google.com/recaptcha/api.js?render=explicit&onload=vcRecapthaApiLoaded" async defer></script>
 
         <!-- Include the ngReCaptcha directive -->
         <script src="./angular-recaptcha.js"></script>
@@ -21,9 +21,23 @@
 
             app.controller('testCtrl', function ($scope, vcRecaptchaService) {
                 console.log("this is your app's controller");
+                $scope.response = null;
+                $scope.widgetId = null;
 
                 $scope.model = {
                     key: '=== REPLACE THIS WITH YOUR PUBLIC ReCaptcha KEY ==='
+                };
+
+                $scope.setResponse = function (response) {
+                    console.info('Response available');
+
+                    $scope.response = response;
+                };
+
+                $scope.setWidgetId = function (widgetId) {
+                    console.info('Created widget ID: %s', widgetId);
+
+                    $scope.widgetId = widgetId;
                 };
 
                 $scope.submit = function () {
@@ -33,19 +47,19 @@
                      * SERVER SIDE VALIDATION
                      *
                      * You need to implement your server side validation here.
-                     * Send the model.captcha object to the server and use some of the server side APIs to validate it
-                     * See https://developers.google.com/recaptcha/docs/
+                     * Send the reCaptcha response to the server and use some of the server side APIs to validate it
+                     * See https://developers.google.com/recaptcha/docs/verify
                      */
-                    console.log('sending the captcha response to the server', vcRecaptchaService.data());
+                    console.log('sending the captcha response to the server', $scope.response);
 
                     if (valid) {
                         console.log('Success');
-
                     } else {
                         console.log('Failed validation');
 
-                        // In case of a failed validation you need to reload the captcha because each challenge can be checked just once
-                        vcRecaptchaService.reload();
+                        // In case of a failed validation you need to reload the captcha
+                        // because each response can be checked just once
+                        vcRecaptchaService.reload($scope.widgetId);
                     }
                 };
             });
@@ -62,16 +76,16 @@
             This way it's safer because we don't depend on a timeout hack that we are currently using in the directive.
         </p>
 
-        <form>
+        <!-- Call a method in the scope of your controller to handle data submit -->
+        <form ng-submit="submit()">
             <div
                 vc-recaptcha
-                tabindex="3"
-                theme="clean"
+                theme="light"
                 key="model.key"
+                on-create="setWidgetId(widgetId)"
+                on-success="setResponse(response)"
             ></div>
-
-            <!-- Call a method in the scope of your controller to handle data submit -->
-            <button class="btn" ng-click="submit()">Submit</button>
+            <button class="btn" type="submit">Submit</button>
         </form>
 
     </div>
