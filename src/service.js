@@ -1,5 +1,5 @@
-/*global angular, Recaptcha */
-(function (ng, Recaptcha) {
+/*global angular */
+(function (ng) {
     'use strict';
 
     var app = ng.module('vcRecaptcha');
@@ -7,12 +7,29 @@
     /**
      * An angular service to wrap the reCaptcha API
      */
-    app.service('vcRecaptchaService', ['$timeout', '$log', function ($timeout, $log) {
+    app.service('vcRecaptchaService', ['$timeout', '$window', '$q', function ($timeout, $window, $q) {
+        var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
-        /**
-         * The reCaptcha callback
-         */
-        var callback;
+        $window.vcRecapthaApiLoaded = function () {
+            recaptcha = $window.grecaptcha;
+
+            deferred.resolve(recaptcha);
+        };
+
+
+        function getRecaptcha() {
+            if (!!recaptcha) {
+                return $q.when(recaptcha);
+            }
+
+            return promise;
+        }
+
+        function validateRecaptchaInstance() {
+            if (!recaptcha) {
+                throw new Error('reCaptcha has not been loaded yet.');
+            }
+        }
 
         return {
 
@@ -25,62 +42,41 @@
              * @param conf the captcha object configuration
              */
             create: function (elm, key, fn, conf) {
-                callback = fn;
-
                 conf.callback = fn;
+                conf.sitekey = key;
 
-                Recaptcha.create(
-                    key,
-                    elm,
-                    conf
-                );
+                return getRecaptcha().then(function (recaptcha) {
+                    return recaptcha.render(elm, conf);
+                });
             },
 
             /**
-             * Reloads the captcha (updates the challenge)
-             *
-             * @param should_focus pass TRUE if the recaptcha should gain the focus after reloading
+             * Reloads the reCaptcha
              */
-            reload: function (should_focus) {
+            reload: function (widgetId) {
+                validateRecaptchaInstance();
 
                 // $log.info('Reloading captcha');
-                Recaptcha.reload(should_focus && 't');
+                recaptcha.reset(widgetId);
 
-                /**
-                 * Since the previous call is asynch, we need again the same hack. See directive code.
-                 * @TODO Investigate another way to know when the new captcha is loaded
-                 * @see https://github.com/VividCortex/angular-recaptcha/issues/4
-                 * @see https://groups.google.com/forum/#!topic/recaptcha/6b7k866qzD0
-                 */
-                $timeout(callback, 1000);
+                // reCaptcha will call the same callback provided to the
+                // create function once this new captcha is resolved.
             },
 
-            data: function () {
-                return {
-                    response:  Recaptcha.get_response(),
-                    challenge: Recaptcha.get_challenge()
-                };
-            },
+            /**
+             * Gets the response from the reCaptcha widget.
+             *
+             * @see https://developers.google.com/recaptcha/docs/display#js_api
+             *
+             * @returns {String}
+             */
+            getResponse: function (widgetId) {
+                validateRecaptchaInstance();
 
-            destroy: function() {
-                Recaptcha.destroy();
-            },
-
-            switch_type: function (type) {
-                if( 'image' === type || 'audio' === type ) {
-                    Recaptcha.switch_type(type);
-                }
-            },
-
-            showhelp: function () {
-                Recaptcha.showhelp();
-            },
-
-            focus_response_field: function() {
-                Recaptcha.focus_response_field();
+                return recaptcha.getResponse(widgetId);
             }
         };
 
     }]);
 
-}(angular, Recaptcha));
+}(angular));
