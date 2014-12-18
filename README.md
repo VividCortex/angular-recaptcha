@@ -23,7 +23,7 @@ Then, include the reCaptcha [API](https://developers.google.com/recaptcha/docs/d
 <script src="https://www.google.com/recaptcha/api.js?onload=vcRecapthaApiLoaded&render=explicit" async defer></script>
 ```
 
-_As you can see, we are specifying a __onload__ callback, wich will notify the angular service once the api is ready for usage._
+_As you can see, we are specifying a __onload__ callback, which will notify the angular service once the api is ready for usage._
 
 Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 
