@@ -5,23 +5,25 @@ Use this directive to be able to submit with XHR a form that contains a reCaptch
 
 
 Demo
-====
+----
 
 See [the demo file](demo/usage.html) for an usage example.
 
-Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file wont work if you just load it in your browser.
+Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file won't work if you just load it in your browser.
 
 
 Usage
-=====
+-----
 
 First, you need to get a valid public key for your domain. See http://www.google.com/recaptcha.
 
-Then, include the reCaptcha [AJAX API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
+Then, include the reCaptcha [API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
 
 ```html
-<script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=vcRecapthaApiLoaded&render=explicit" async defer></script>
 ```
+
+_As you can see, we are specifying a __onload__ callback, which will notify the angular service once the api is ready for usage._
 
 Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 
@@ -43,40 +45,84 @@ After that, you can place a container for the captcha widget in your view, and c
 ></div>
 ```
 
-Here the `key` attribute is passed to the directive's scope, so you can use either a property in your scope or just a hardcoded string. Be careful to use your public key, not your private one.
+Here, the `key` attribute is passed to the directive's scope, so you can use either a property in your scope or just a hardcoded string. Be careful to use your public key, not your private one.
 
-To validate this object from your server, you need to use one of the [server side plugins](https://developers.google.com/recaptcha/) or [roll your own](https://developers.google.com/recaptcha/docs/verify). Validations is outside of the scope of this tool, since is mandatory to do that at the server side.
-To get the values that you need to send to your server, use the `vcRecaptchaService` angular service. This object contains a `data()` method that returns two values needed to validate the captcha in your server. ```response``` is the response of the user, and ```challenge``` is the identification of the captcha that your user resolved.
+To validate this object from your server, you need to use the API described in the [verify section](https://developers.google.com/recaptcha/docs/verify). Validation is outside of the scope of this tool, since is mandatory to do that at the server side.
+To get the _response_ that you need to send to your server, use the method `getResponse()` from the `vcRecaptchaService` angular service, which will return the string that you'll need.
 
-```json
-{
-    "response": "foo bar",
-    "challenge": "03AHJ_VuvQ5p0AdejIw4W6yUKA65eRIEFiXFTxtKYD22UH9zjavXK4IYRZ8fhaGHjKXLKZa2MA-Lqeui5V9aeRWWTZSN6e1tED4gt7O77ROTcyY0Uedkc7LHzSUbLNULMcbXb2JThqLgOMvHINaoOtoniW4CepuOLG2h8s0tRUfqaQt6iUqNeWWHQ"
-}
+The method `getResponse()` receives an optional argument _widgetId_, useful for getting the response of a specific reCaptcha widget(in case you render more than one widget). If no widget ID is provided, the response for the first created widget will be returned.
+
+```js
+var response = vcRecaptchaService.getResponse();
+```
+
+```
+ThisiSasUpeRSecretStringTHatrepResenTstheREsPonSEFRomthEuSer
 ```
 
 Other Parameters
-================
+----------------
 
-You can optionally pass other parameters to the captcha, as html attributes:
+You can optionally pass a __theme__ the captcha should use, as an html attribute:
 
 ```html
     <div
         vc-recaptcha
-        ng-model="model.captcha"
-        tabindex="3"
-        theme="clean"
-        lang="en"
+        theme="light"
         key="'---- YOUR PUBLIC KEY GOES HERE ----'"
     ></div>
 ```
 
-In this case we are specifying that the captcha should use the theme named 'clean', display the texts in english language and the captcha input should have tabindex 3.
+In this case we are specifying that the captcha should use the theme named _light_.
 
+Listeners
+---------
+
+There are two listeners you can use with the directive, `on-create` and `on-success`.
+
+* __on-create__: It's called right after the widget is created. It receives a widget ID, which could be helpful if you have more than one reCaptcha in your site.
+* __on-success__: It's called once the user resolves the captcha. It receives the response string you would need for verifying the response.
+
+
+```html
+<div
+    vc-recaptcha
+    key="'---- YOUR PUBLIC KEY GOES HERE ----'"
+    on-create="onCreate(widgetId)"
+    on-success="onSuccess(response)"
+></div>
+```
+
+### Example
+
+```js
+app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope, recaptcha) {
+    $scope.onCreate = function (widgetId) {
+        // store the `widgetId` for future usage.
+        // For example for getting the response with
+        // `recaptcha.getResponse(widgetId)`.
+    };
+
+    $scope.onSuccess = function (response) {
+        // send the `response` to your server for verification.
+    };
+}]);
+```
+
+Differences with the old reCaptcha
+----------------------------------
+
+- The _lang_ parameter in the directive is no longer used by reCaptcha. If you want to force a language, you'd need to add a `hl` parameter to the script of the reCaptcha API (`?onload=onloadCallback&render=explicit&hl=es`).
+- Parameter _tabindex_ is no longer used by reCaptcha and its usage has no effect.
+- Access to the input text is no longer supported.
+- _Challenge_ is no longer provided by reCaptcha. The response text is used along with the private key and user's IP address for verification.
+- Switching between image and audio is now handled by reCaptcha.
+- Help display is now handled by reCaptcha.
 
 Recent Changelog
-================
+----------------
 
+- 2.0.0 - Rewritten service to support new reCaptcha
 - 1.0.2 - added extra `Recaptcha` object methods to the service, i.e. `switch_type`, `showhelp`, etc.
 - 1.0.0 - the `key` attribute is now a scope property of the directive
 - Added the ```destroy()``` method to the service. Thanks to @endorama.
