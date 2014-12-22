@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2014-12-19 
+ * angular-recaptcha build:2014-12-22 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2014 VividCortex 
 **/
@@ -43,6 +43,12 @@
             if (!recaptcha) {
                 throw new Error('reCaptcha has not been loaded yet.');
             }
+        }
+
+
+        // Check if grecaptcha is not defined already.
+        if (ng.isDefined($window.grecaptcha)) {
+            $window.vcRecapthaApiLoaded();
         }
 
         return {

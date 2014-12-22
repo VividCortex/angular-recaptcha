@@ -122,6 +122,7 @@ Differences with the old reCaptcha
 Recent Changelog
 ----------------
 
+- 2.0.1 - Fixed onload when using ng-route and recaptcha is placed in a secondary view.
 - 2.0.0 - Rewritten service to support new reCaptcha
 - 1.0.2 - added extra `Recaptcha` object methods to the service, i.e. `switch_type`, `showhelp`, etc.
 - 1.0.0 - the `key` attribute is now a scope property of the directive
