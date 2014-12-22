@@ -31,6 +31,12 @@
             }
         }
 
+
+        // Check if grecaptcha is not defined already.
+        if (ng.isDefined($window.grecaptcha)) {
+            $window.vcRecapthaApiLoaded();
+        }
+
         return {
 
             /**
