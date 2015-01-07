@@ -8,16 +8,20 @@
 
     var app = ng.module('vcRecaptcha');
 
-    app.directive('vcRecaptcha', ['$log', '$timeout', 'vcRecaptchaService', function ($log, $timeout, vcRecaptcha) {
+    app.directive('vcRecaptcha', ['$timeout', 'vcRecaptchaService', function ($timeout, vcRecaptcha) {
 
         return {
             restrict: 'A',
+            require: "?^^form",
             scope: {
+                response: '=?ngModel',
                 key: '=',
+                theme: '=',
                 onCreate: '&',
-                onSuccess: '&'
+                onSuccess: '&',
+                onExpire: '&'
             },
-            link: function (scope, elm, attrs) {
+            link: function (scope, elm, attrs, ctrl) {
                 if (!attrs.hasOwnProperty('key')) {
                     throwNoKeyException();
                 }
@@ -33,20 +37,39 @@
                         throwNoKeyException();
                     }
 
-                    var callback = function () {
-                        // Notify about the response availability
-                        scope.onSuccess({response: vcRecaptcha.getResponse(scope.widgetId)});
+                    var callback = function (gRecaptchaResponse) {
+                        // Safe $apply
+                        $timeout(function () {
+                            if(ctrl){
+                                ctrl.$setValidity('recaptcha',true);
+                            }
+                            scope.response = gRecaptchaResponse;
+                            // Notify about the response availability
+                            scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
+                        });
+
+                        // captcha session lasts 2 mins after set.
+                        $timeout(function (){
+                            if(ctrl){
+                                ctrl.$setValidity('recaptcha',false);
+                            }
+                            scope.response = "";
+                            // Notify about the response availability
+                            scope.onExpire({widgetId: scope.widgetId});
+                        }, 2 * 60 * 1000);
                     };
 
-                    vcRecaptcha.create(elm[0], scope.key, callback, {
+                    vcRecaptcha.create(elm[0], key, callback, {
 
-                        theme: attrs.theme || null
+                        theme: scope.theme || null
 
                     }).then(function (widgetId) {
-
                         // The widget has been created
+                        if(ctrl){
+                            ctrl.$setValidity('recaptcha',false);
+                        }
                         scope.widgetId = widgetId;
-                        scope.onCreate({widgetId: scope.widgetId});
+                        scope.onCreate({widgetId: widgetId});
                     });
 
                     // Remove this listener to avoid creating the widget more than once.
