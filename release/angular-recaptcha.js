@@ -1,7 +1,7 @@
 /**
- * angular-recaptcha build:2014-12-22
- * https://github.com/vividcortex/angular-recaptcha
- * Copyright (c) 2014 VividCortex
+ * angular-recaptcha build:2014-12-22 
+ * https://github.com/vividcortex/angular-recaptcha 
+ * Copyright (c) 2014 VividCortex 
 **/
 
 /*global angular, Recaptcha */
