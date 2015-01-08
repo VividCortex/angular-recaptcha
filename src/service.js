@@ -7,7 +7,7 @@
     /**
      * An angular service to wrap the reCaptcha API
      */
-    app.service('vcRecaptchaService', ['$timeout', '$window', '$q', function ($timeout, $window, $q) {
+    app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
         $window.vcRecapthaApiLoaded = function () {
