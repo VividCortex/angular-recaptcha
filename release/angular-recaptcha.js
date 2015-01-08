@@ -1,7 +1,7 @@
 /**
- * angular-recaptcha build:2014-12-22 
+ * angular-recaptcha build:2015-01-08 
  * https://github.com/vividcortex/angular-recaptcha 
- * Copyright (c) 2014 VividCortex 
+ * Copyright (c) 2015 VividCortex 
 **/
 
 /*global angular, Recaptcha */
@@ -21,7 +21,7 @@
     /**
      * An angular service to wrap the reCaptcha API
      */
-    app.service('vcRecaptchaService', ['$timeout', '$window', '$q', function ($timeout, $window, $q) {
+    app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
         $window.vcRecapthaApiLoaded = function () {
@@ -111,16 +111,20 @@
 
     var app = ng.module('vcRecaptcha');
 
-    app.directive('vcRecaptcha', ['$log', '$timeout', 'vcRecaptchaService', function ($log, $timeout, vcRecaptcha) {
+    app.directive('vcRecaptcha', ['$timeout', 'vcRecaptchaService', function ($timeout, vcRecaptcha) {
 
         return {
             restrict: 'A',
+            require: "?^^form",
             scope: {
+                response: '=?ngModel',
                 key: '=',
+                theme: '?=',
                 onCreate: '&',
-                onSuccess: '&'
+                onSuccess: '&',
+                onExpire: '&'
             },
-            link: function (scope, elm, attrs) {
+            link: function (scope, elm, attrs, ctrl) {
                 if (!attrs.hasOwnProperty('key')) {
                     throwNoKeyException();
                 }
@@ -136,20 +140,39 @@
                         throwNoKeyException();
                     }
 
-                    var callback = function () {
-                        // Notify about the response availability
-                        scope.onSuccess({response: vcRecaptcha.getResponse(scope.widgetId)});
+                    var callback = function (gRecaptchaResponse) {
+                        // Safe $apply
+                        $timeout(function () {
+                            if(ctrl){
+                                ctrl.$setValidity('recaptcha',true);
+                            }
+                            scope.response = gRecaptchaResponse;
+                            // Notify about the response availability
+                            scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
+                        });
+
+                        // captcha session lasts 2 mins after set.
+                        $timeout(function (){
+                            if(ctrl){
+                                ctrl.$setValidity('recaptcha',false);
+                            }
+                            scope.response = "";
+                            // Notify about the response availability
+                            scope.onExpire({widgetId: scope.widgetId});
+                        }, 2 * 60 * 1000);
                     };
 
-                    vcRecaptcha.create(elm[0], scope.key, callback, {
+                    vcRecaptcha.create(elm[0], key, callback, {
 
-                        theme: attrs.theme || null
+                        theme: scope.theme || attrs.theme || null
 
                     }).then(function (widgetId) {
-
                         // The widget has been created
+                        if(ctrl){
+                            ctrl.$setValidity('recaptcha',false);
+                        }
                         scope.widgetId = widgetId;
-                        scope.onCreate({widgetId: scope.widgetId});
+                        scope.onCreate({widgetId: widgetId});
                     });
 
                     // Remove this listener to avoid creating the widget more than once.
