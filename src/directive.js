@@ -16,7 +16,7 @@
             scope: {
                 response: '=?ngModel',
                 key: '=',
-                theme: '=',
+                theme: '?=',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
@@ -61,7 +61,7 @@
 
                     vcRecaptcha.create(elm[0], key, callback, {
 
-                        theme: scope.theme || null
+                        theme: scope.theme || attrs.theme || null
 
                     }).then(function (widgetId) {
                         // The widget has been created
