@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2015-01-08 
+ * angular-recaptcha build:2015-01-09 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2015 VividCortex 
 **/
@@ -119,7 +119,7 @@
             scope: {
                 response: '=?ngModel',
                 key: '=',
-                theme: '?=',
+                theme: '=?',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
