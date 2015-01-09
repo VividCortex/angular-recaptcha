@@ -16,7 +16,7 @@
             scope: {
                 response: '=?ngModel',
                 key: '=',
-                theme: '?=',
+                theme: '=?',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
