@@ -7,34 +7,10 @@
     /**
      * An angular service to wrap the reCaptcha API
      */
-    app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
-        var deferred = $q.defer(), promise = deferred.promise, recaptcha;
-
-        $window.vcRecapthaApiLoaded = function () {
-            recaptcha = $window.grecaptcha;
-
-            deferred.resolve(recaptcha);
-        };
-
+    app.service('vcRecaptchaService', ['vcRecaptchaFactory', function (factory) {
 
         function getRecaptcha() {
-            if (!!recaptcha) {
-                return $q.when(recaptcha);
-            }
-
-            return promise;
-        }
-
-        function validateRecaptchaInstance() {
-            if (!recaptcha) {
-                throw new Error('reCaptcha has not been loaded yet.');
-            }
-        }
-
-
-        // Check if grecaptcha is not defined already.
-        if (ng.isDefined($window.grecaptcha)) {
-            $window.vcRecapthaApiLoaded();
+            return factory.grecaptcha();
         }
 
         return {
@@ -60,10 +36,11 @@
              * Reloads the reCaptcha
              */
             reload: function (widgetId) {
-                validateRecaptchaInstance();
 
                 // $log.info('Reloading captcha');
-                recaptcha.reset(widgetId);
+                getRecaptcha().then(function (recaptcha) {
+                    return recaptcha.reset(widgetId);
+                });
 
                 // reCaptcha will call the same callback provided to the
                 // create function once this new captcha is resolved.
@@ -77,9 +54,9 @@
              * @returns {String}
              */
             getResponse: function (widgetId) {
-                validateRecaptchaInstance();
-
-                return recaptcha.getResponse(widgetId);
+                getRecaptcha().then(function (recaptcha) {
+                    return recaptcha.getResponse(widgetId);
+                });
             }
         };
 
