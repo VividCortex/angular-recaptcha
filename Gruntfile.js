@@ -17,7 +17,8 @@ module.exports = function (grunt) {
                     '<banner>',
                     'src/module.js',
                     'src/service.js',
-                    'src/directive.js'
+                    'src/directive.js',
+                    'src/factory.js'
                 ],
                 dest: 'release/<%= pkg.name %>.js'
             }
