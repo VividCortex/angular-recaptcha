@@ -20,7 +20,7 @@ First, you need to get a valid public key for your domain. See http://www.google
 Then, include the reCaptcha [API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
 
 ```html
-<script src="https://www.google.com/recaptcha/api.js?onload=vcRecapthaApiLoaded&render=explicit" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
 ```
 
 _As you can see, we are specifying a __onload__ callback, which will notify the angular service once the api is ready for usage._
