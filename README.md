@@ -88,8 +88,8 @@ There are two listeners you can use with the directive, `on-create` and `on-succ
 <div
     vc-recaptcha
     key="'---- YOUR PUBLIC KEY GOES HERE ----'"
-    on-create="onCreate(widgetId)"
-    on-success="onSuccess(response)"
+    on-create="setWidgetId(widgetId)"
+    on-success="setResponse(response)"
 ></div>
 ```
 
@@ -97,13 +97,13 @@ There are two listeners you can use with the directive, `on-create` and `on-succ
 
 ```js
 app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope, recaptcha) {
-    $scope.onCreate = function (widgetId) {
+    $scope.setWidgetId = function (widgetId) {
         // store the `widgetId` for future usage.
         // For example for getting the response with
         // `recaptcha.getResponse(widgetId)`.
     };
 
-    $scope.onSuccess = function (response) {
+    $scope.setResponse = function (response) {
         // send the `response` to your server for verification.
     };
 }]);
