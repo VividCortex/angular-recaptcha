@@ -128,4 +128,4 @@ Recent Changelog
 - 1.0.0 - the `key` attribute is now a scope property of the directive
 - Added the ```destroy()``` method to the service. Thanks to @endorama.
 - We added a different integration method (see demo/2.html) which is safer because it doesn't relies on a timeout on the reload event of the recaptcha. Thanks to [@sboisse](https://github.com/sboisse) for reporting the issue and suggesting the solution.
-- The release is now built using [GruntJS](gruntjs.com) so if you were using the source files (the ```src``` directory) in your projects you should now use the files in the release directory.
+- The release is now built using [GruntJS](http://gruntjs.com/) so if you were using the source files (the ```src``` directory) in your projects you should now use the files in the release directory.
