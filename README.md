@@ -20,7 +20,7 @@ First, you need to get a valid public key for your domain. See http://www.google
 Then, include the reCaptcha [API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
 
 ```html
-<script src="https://www.google.com/recaptcha/api.js?onload=vcRecapthaApiLoaded&render=explicit" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
 ```
 
 _As you can see, we are specifying a __onload__ callback, which will notify the angular service once the api is ready for usage._
@@ -88,8 +88,8 @@ There are two listeners you can use with the directive, `on-create` and `on-succ
 <div
     vc-recaptcha
     key="'---- YOUR PUBLIC KEY GOES HERE ----'"
-    on-create="onCreate(widgetId)"
-    on-success="onSuccess(response)"
+    on-create="setWidgetId(widgetId)"
+    on-success="setResponse(response)"
 ></div>
 ```
 
@@ -97,13 +97,13 @@ There are two listeners you can use with the directive, `on-create` and `on-succ
 
 ```js
 app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope, recaptcha) {
-    $scope.onCreate = function (widgetId) {
+    $scope.setWidgetId = function (widgetId) {
         // store the `widgetId` for future usage.
         // For example for getting the response with
         // `recaptcha.getResponse(widgetId)`.
     };
 
-    $scope.onSuccess = function (response) {
+    $scope.setResponse = function (response) {
         // send the `response` to your server for verification.
     };
 }]);
@@ -128,4 +128,4 @@ Recent Changelog
 - 1.0.0 - the `key` attribute is now a scope property of the directive
 - Added the ```destroy()``` method to the service. Thanks to @endorama.
 - We added a different integration method (see demo/2.html) which is safer because it doesn't relies on a timeout on the reload event of the recaptcha. Thanks to [@sboisse](https://github.com/sboisse) for reporting the issue and suggesting the solution.
-- The release is now built using [GruntJS](gruntjs.com) so if you were using the source files (the ```src``` directory) in your projects you should now use the files in the release directory.
+- The release is now built using [GruntJS](http://gruntjs.com/) so if you were using the source files (the ```src``` directory) in your projects you should now use the files in the release directory.

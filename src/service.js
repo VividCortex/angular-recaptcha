@@ -10,7 +10,7 @@
     app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
-        $window.vcRecapthaApiLoaded = function () {
+        $window.vcRecaptchaApiLoaded = function () {
             recaptcha = $window.grecaptcha;
 
             deferred.resolve(recaptcha);
@@ -34,7 +34,7 @@
 
         // Check if grecaptcha is not defined already.
         if (ng.isDefined($window.grecaptcha)) {
-            $window.vcRecapthaApiLoaded();
+            $window.vcRecaptchaApiLoaded();
         }
 
         return {
