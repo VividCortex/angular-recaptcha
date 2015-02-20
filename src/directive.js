@@ -46,6 +46,7 @@
                             scope.response = gRecaptchaResponse;
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
+                            angular.element('.pls-container').parent().remove();
                         });
 
                         // captcha session lasts 2 mins after set.
