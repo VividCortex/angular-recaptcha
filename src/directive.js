@@ -71,6 +71,11 @@
                         }
                         scope.widgetId = widgetId;
                         scope.onCreate({widgetId: widgetId});
+                        
+                        scope.$on('$destroy', function(){
+                            angular.element('.pls-container').parent().remove();
+                        });
+                        
                     });
 
                     // Remove this listener to avoid creating the widget more than once.
