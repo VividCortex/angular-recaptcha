@@ -12,6 +12,28 @@ See [the demo file](demo/usage.html) for an usage example.
 Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file won't work if you just load it in your browser.
 
 
+Install
+-----
+
+You'll need `release/angular-recaptcha.js` and/or `release/angular-recaptcha.min.js`.
+
+### Manual
+
+Download the [latest release](https://github.com/VividCortex/angular-recaptcha/releases/latest).
+
+### Bower
+
+```
+bower install --save angular-recaptcha
+```
+
+### npm
+
+```
+npm install --save angular-recaptcha
+```
+
+
 Usage
 -----
 
