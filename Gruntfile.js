@@ -44,15 +44,26 @@ module.exports = function (grunt) {
                 gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe'
             }
         },
-
+        karma:
+        {
+            unit:
+            {
+                configFile: 'karma.conf.js',
+                browsers: ['PhantomJS'],
+                singleRun: true
+            }
+        }
     });
 
     // Load the plugin that provides the needed tasks.
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-karma');
 
     // Default task(s).
     grunt.registerTask('default', ['concat', 'uglify']);
 
+    // Unit Test task(s).
+    grunt.registerTask('test', ['karma:unit']);
 };
