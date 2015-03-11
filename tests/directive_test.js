@@ -88,13 +88,112 @@ describe('directive: vcRecaptcha', function()
 
     describe('form validation', function()
     {
-        it('should change the validation to true', function()
+        it('should change the validation to false, widget just created', function()
         {
-            spyOn(_vcRecaptchaService, 'create').and.callThrough();
+            var _fakeCreate = function(element, key, cb, options)
+            {
+                return {
+                            then: function(cb)
+                            {
+                                var _widgetId = 'a';
+
+                                cb(_widgetId);
+                            }
+                      };
+            }
+
+            _scope.onCreate = angular.noop;
+
+            spyOn(_vcRecaptchaService, 'create').and.callFake(_fakeCreate);
+
             _scope.k = VALID_KEY;
 
             var _html = '<form name="form">' +
-                '<div vc-recaptcha key="k"></div>'+
+                            '<input type="text" ng-model="something" />' +
+                            '<div vc-recaptcha key="k" on-create="onCreate({widgetId: widgetId})" />' +
+                        '</form>';
+
+            _element = angular.element(_html);
+
+            _compile(_element)(_scope);
+
+            spyOn(_element.scope(), 'onCreate').and.callThrough();
+
+            var _form = _scope.form;
+
+            _scope.$digest();
+
+            expect(_form.$valid).toBeFalsy(); // widgetCreated
+
+            expect(_vcRecaptchaService.create).toHaveBeenCalled();
+            expect(_element.scope().onCreate).toHaveBeenCalledWith({widgetId: 'a'});
+        })
+
+        it('should change the validation to true - first timeout flushed', function()
+        {
+            var _fakeCreate = function(element, key, cb, options)
+            {
+                cb('response from google');
+
+                return {
+                    then: function(cb)
+                    {
+                        cb();
+                    }
+                };
+            }
+
+            _scope.onCreate = angular.noop;
+            _scope.onSuccess = angular.noop;
+
+            spyOn(_vcRecaptchaService, 'create').and.callFake(_fakeCreate);
+
+            _scope.k = VALID_KEY;
+
+            var _html = '<form name="form">' +
+                            '<input type="text" ng-model="something" />' +
+                            '<div vc-recaptcha key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
+                        '</form>';
+
+            _element = angular.element(_html);
+
+            _compile(_element)(_scope);
+
+            var _form = _scope.form;
+
+            _scope.$digest();
+
+            _timeoutMock.flush(TIMEOUT_SESSION_CAPTCHA - 1);
+
+            expect(_form.$valid).toBeTruthy();
+
+            expect(_vcRecaptchaService.create).toHaveBeenCalled();
+        })
+
+        it('should change the validation to false - session expired', function()
+        {
+            var _fakeCreate = function(element, key, cb, options)
+            {
+                cb('response from google');
+
+                return {
+                    then: function(cb)
+                    {
+                        cb();
+                    }
+                };
+            }
+
+            _scope.onCreate = angular.noop;
+            _scope.onSuccess = angular.noop;
+
+            spyOn(_vcRecaptchaService, 'create').and.callFake(_fakeCreate);
+
+            _scope.k = VALID_KEY;
+
+            var _html = '<form name="form">' +
+                '<input type="text" ng-model="something" />' +
+                '<div vc-recaptcha key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
                 '</form>';
 
             _element = angular.element(_html);
@@ -105,16 +204,60 @@ describe('directive: vcRecaptcha', function()
 
             _scope.$digest();
 
-            _timeoutMock.flush();
+            _timeoutMock.flush(TIMEOUT_SESSION_CAPTCHA + 1);
 
-            expect(_form.$valid).toBeTruthy();
+            expect(_form.$valid).toBeFalsy(); // widgetCreated
 
             expect(_vcRecaptchaService.create).toHaveBeenCalled();
         })
-    })
 
-    describe('on widget creation', function()
-    {
-        it('something')
+        it('should call the onSuccess callback with the right params', function()
+        {
+            var _fakeCreate = function(element, key, cb, options)
+            {
+                cb('response from google');
+
+                return {
+                    then: function(cb)
+                    {
+                        cb();
+                    }
+                };
+            }
+
+            _scope.onCreate = angular.noop;
+            _scope.onSuccess = angular.noop;
+
+            spyOn(_vcRecaptchaService, 'create').and.callFake(_fakeCreate);
+
+            _scope.k = VALID_KEY;
+
+            var _html = '<form name="form">' +
+                '<input type="text" ng-model="something" />' +
+                '<div vc-recaptcha key="k" on-create="onCreate()" on-success="onSuccess({response: response, widgetId: id})"/>' +
+                '</form>';
+
+            _element = angular.element(_html);
+
+            _compile(_element)(_scope);
+
+            var _form = _scope.form;
+
+            spyOn(_element.scope(), 'onSuccess').and.callFake(angular.noop);
+
+            _scope.$digest();
+
+            _timeoutMock.flush(TIMEOUT_SESSION_CAPTCHA - 1);
+
+            expect(_form.$valid).toBeTruthy();
+
+            _timeoutMock.flush(TIMEOUT_SESSION_CAPTCHA + 1);
+
+            expect(_form.$valid).toBeFalsy(); // widgetCreated
+
+            expect(_vcRecaptchaService.create).toHaveBeenCalled();
+
+            expect(_element.scope().onSuccess).toHaveBeenCalledWith({response: 'response from google', widgetId: undefined});
+        })
     })
 })

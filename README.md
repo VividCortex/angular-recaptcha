@@ -1,6 +1,9 @@
 VividCortex reCaptcha AngularJS Directive
 =========================================
 
+[![Build Status](https://travis-ci.org/VividCortex/angular-recaptcha.svg?branch=master)](https://travis-ci.org/VividCortex/angular-recaptcha)
+[![Coverage Status](https://coveralls.io/repos/VividCortex/angular-recaptcha/badge.svg?branch=master)](https://coveralls.io/r/VividCortex/angular-recaptcha?branch=master)
+
 Use this directive to be able to submit with XHR a form that contains a reCaptcha.
 
 
