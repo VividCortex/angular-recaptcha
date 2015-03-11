@@ -8,7 +8,7 @@
 
     var app = ng.module('vcRecaptcha');
 
-    app.directive('vcRecaptcha', ['$timeout', 'vcRecaptchaService', function ($timeout, vcRecaptcha) {
+    app.directive('vcRecaptcha', ['$document', '$timeout', 'vcRecaptchaService', function ($document, $timeout, vcRecaptcha) {
 
         return {
             restrict: 'A',
@@ -82,7 +82,7 @@
 
                 function cleanup(){
                   // removes elements reCaptcha added.
-                  angular.element(document.querySelectorAll('.pls-container')).parent().remove();
+                  angular.element($document.querySelectorAll('.pls-container')).parent().remove();
                 }
             }
         };
