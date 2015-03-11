@@ -70,7 +70,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma-coveralls');
 
     // Default task(s).
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['karma:unit', 'concat', 'uglify']);
 
     // Unit Test task(s).
     grunt.registerTask('test', ['karma:unit']);
