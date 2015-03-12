@@ -41,6 +41,7 @@
                         // Safe $apply
                         $timeout(function () {
                             if(ctrl){
+
                                 ctrl.$setValidity('recaptcha',true);
                             }
                             scope.response = gRecaptchaResponse;

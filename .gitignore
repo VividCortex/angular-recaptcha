@@ -1,9 +1,12 @@
 # IDE Files
-.idea/*
+.idea
 
 # OS Files
 .DS_Store
 
 # Node, Grunt, Bower, general build process files
-bower_components/*
-node_modules/*
+bower_components
+node_modules
+
+# Coverage folder
+coverage
