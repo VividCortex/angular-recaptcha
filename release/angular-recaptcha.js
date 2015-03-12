@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2015-02-08 
+ * angular-recaptcha build:2015-03-12 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2015 VividCortex 
 **/
@@ -111,7 +111,7 @@
 
     var app = ng.module('vcRecaptcha');
 
-    app.directive('vcRecaptcha', ['$timeout', 'vcRecaptchaService', function ($timeout, vcRecaptcha) {
+    app.directive('vcRecaptcha', ['$document', '$timeout', 'vcRecaptchaService', function ($document, $timeout, vcRecaptcha) {
 
         return {
             restrict: 'A',
@@ -149,6 +149,7 @@
                             scope.response = gRecaptchaResponse;
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
+                            cleanup();
                         });
 
                         // captcha session lasts 2 mins after set.
@@ -173,11 +174,19 @@
                         }
                         scope.widgetId = widgetId;
                         scope.onCreate({widgetId: widgetId});
+
+                        scope.$on('$destroy', cleanup);
+
                     });
 
                     // Remove this listener to avoid creating the widget more than once.
                     removeCreationListener();
                 });
+
+                function cleanup(){
+                  // removes elements reCaptcha added.
+                  angular.element($document.querySelectorAll('.pls-container')).parent().remove();
+                }
             }
         };
     }]);
