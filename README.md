@@ -112,6 +112,28 @@ app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope
 }]);
 ```
 
+### Contributing
+
+Make sure you have every dependency and devDependency installed. In the root of the app, run:
+
+```
+
+$ npm install && bower install
+
+```
+
+Make sure you're not breaking anything; run:
+
+```
+
+$ grunt test
+
+```
+
+If all is good, you can push your changes.
+
+
+
 Differences with the old reCaptcha
 ----------------------------------
 
