@@ -82,7 +82,7 @@
 
                 function cleanup(){
                   // removes elements reCaptcha added.
-                  angular.element($document.querySelectorAll('.pls-container')).parent().remove();
+                  angular.element($document[0].querySelectorAll('.pls-container')).parent().remove();
                 }
             }
         };
