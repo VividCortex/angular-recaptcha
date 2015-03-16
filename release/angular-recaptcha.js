@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2015-03-12 
+ * angular-recaptcha build:2015-03-16 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2015 VividCortex 
 **/
@@ -185,7 +185,7 @@
 
                 function cleanup(){
                   // removes elements reCaptcha added.
-                  angular.element($document.querySelectorAll('.pls-container')).parent().remove();
+                  angular.element($document[0].querySelectorAll('.pls-container')).parent().remove();
                 }
             }
         };
