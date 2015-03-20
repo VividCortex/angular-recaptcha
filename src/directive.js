@@ -17,6 +17,7 @@
                 response: '=?ngModel',
                 key: '=',
                 theme: '=?',
+                tabindex: '=?',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
@@ -62,7 +63,8 @@
 
                     vcRecaptcha.create(elm[0], key, callback, {
 
-                        theme: scope.theme || attrs.theme || null
+                        theme: scope.theme || attrs.theme || null,
+                        tabindex: scope.tabindex || attrs.tabindex || null
 
                     }).then(function (widgetId) {
                         // The widget has been created
