@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2015-03-16 
+ * angular-recaptcha build:2015-03-22 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2015 VividCortex 
 **/
@@ -120,6 +120,7 @@
                 response: '=?ngModel',
                 key: '=',
                 theme: '=?',
+                tabindex: '=?',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
@@ -165,7 +166,8 @@
 
                     vcRecaptcha.create(elm[0], key, callback, {
 
-                        theme: scope.theme || attrs.theme || null
+                        theme: scope.theme || attrs.theme || null,
+                        tabindex: scope.tabindex || attrs.tabindex || null
 
                     }).then(function (widgetId) {
                         // The widget has been created
