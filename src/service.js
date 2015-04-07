@@ -18,7 +18,7 @@
 
 
         function getRecaptcha() {
-            if (!!recaptcha) {
+            if (!recaptcha) {
                 return $q.when(recaptcha);
             }
 
