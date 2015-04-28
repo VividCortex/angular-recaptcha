@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2015-03-22 
+ * angular-recaptcha build:2015-04-28 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2015 VividCortex 
 **/
@@ -150,7 +150,6 @@
                             scope.response = gRecaptchaResponse;
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
-                            cleanup();
                         });
 
                         // captcha session lasts 2 mins after set.
