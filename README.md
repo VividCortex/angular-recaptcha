@@ -45,7 +45,7 @@ Then, include the reCaptcha [API](https://developers.google.com/recaptcha/docs/d
 <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
 ```
 
-_As you can see, we are specifying a __onload__ callback, which will notify the angular service once the api is ready for usage._
+_As you can see, we are specifying a `onload` callback, which will notify the angular service once the api is ready for usage._
 
 Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 
@@ -56,7 +56,6 @@ Also include the vc-recaptcha script and make your angular app depend on the `vc
 ```javascript
 var app = angular.module('myApp', ['vcRecaptcha']);
 ```
-
 
 After that, you can place a container for the captcha widget in your view, and call the `vc-recaptcha` directive on it like this:
 
@@ -69,17 +68,15 @@ After that, you can place a container for the captcha widget in your view, and c
 
 Here, the `key` attribute is passed to the directive's scope, so you can use either a property in your scope or just a hardcoded string. Be careful to use your public key, not your private one.
 
-To validate this object from your server, you need to use the API described in the [verify section](https://developers.google.com/recaptcha/docs/verify). Validation is outside of the scope of this tool, since is mandatory to do that at the server side.
-To get the _response_ that you need to send to your server, use the method `getResponse()` from the `vcRecaptchaService` angular service, which will return the string that you'll need.
+Response Validation
+-------------------
 
-The method `getResponse()` receives an optional argument _widgetId_, useful for getting the response of a specific reCaptcha widget(in case you render more than one widget). If no widget ID is provided, the response for the first created widget will be returned.
+To validate this object from your server, you need to use the API described in the [verify section](https://developers.google.com/recaptcha/docs/verify). Validation is outside of the scope of this tool, since is mandatory to do that at the server side.
+
+To get the _response_ that you need to send to your server, use the method `getResponse()` from the `vcRecaptchaService` angular service. This method receives an optional argument _widgetId_, useful for getting the response of a specific reCaptcha widget (in case you render more than one widget). If no widget ID is provided, the response for the first created widget will be returned.
 
 ```js
-var response = vcRecaptchaService.getResponse();
-```
-
-```
-ThisiSasUpeRSecretStringTHatrepResenTstheREsPonSEFRomthEuSer
+var response = vcRecaptchaService.getResponse(); // returns the string response
 ```
 
 Other Parameters
