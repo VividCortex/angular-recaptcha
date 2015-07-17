@@ -41,7 +41,10 @@ See [the demo file](demo/usage.html) for a quick usage example.
 - Include the reCaptcha [API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
 
 ```html
-<script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
+<script
+  src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"
+  async defer
+></script>
 ```
     As you can see, we are specifying a `onload` callback, which will notify the
     angular service once the api is ready for usage.
