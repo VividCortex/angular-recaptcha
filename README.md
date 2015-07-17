@@ -32,15 +32,20 @@ Usage
 
 See [the demo file](demo/usage.html) for a quick usage example.
 
-    IMPORTANT: Keep in mind that the captcha only works when used from a real domain and with a valid re-captcha key, so this file won't work if you just load it in your browser.
+    IMPORTANT: Keep in mind that the captcha only works when used from a real domain
+    and with a valid re-captcha key, so this file won't work if you just load it in
+    your browser.
 
 - First, you need to get a valid recaptcha key for your domain. Go to http://www.google.com/recaptcha.
+
 - Include the reCaptcha [API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
 
 ```html
 <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
 ```
-    As you can see, we are specifying a `onload` callback, which will notify the angular service once the api is ready for usage.
+    As you can see, we are specifying a `onload` callback, which will notify the
+    angular service once the api is ready for usage.
+    
 - Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 
 ```html
