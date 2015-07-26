@@ -21,12 +21,18 @@
                 tabindex: '=?',
                 onCreate: '&',
                 onSuccess: '&',
-                onExpire: '&'
+                onExpire: '&',
+				required: '=?ngRequired'
             },
             link: function (scope, elm, attrs, ctrl) {
                 if (!attrs.hasOwnProperty('key')) {
                     throwNoKeyException();
                 }
+
+                scope.$watch('required', function (required) {
+					if(required !== undefined)
+                		ctrl.$setValidity('recaptcha', !required);
+	            });
 
                 scope.widgetId = null;
 
@@ -43,7 +49,7 @@
                         // Safe $apply
                         $timeout(function () {
                             if(ctrl){
-                                ctrl.$setValidity('recaptcha',true);
+                                ctrl.$setValidity('recaptcha', true);
                             }
                             scope.response = gRecaptchaResponse;
                             // Notify about the response availability
@@ -52,8 +58,9 @@
 
                         // captcha session lasts 2 mins after set.
                         $timeout(function (){
-                            if(ctrl){
-                                ctrl.$setValidity('recaptcha',false);
+                        	if (ctrl) {
+                        		var valid = (scope.required !== undefined) ? !scope.required : false;
+                        		ctrl.$setValidity('recaptcha', valid);
                             }
                             scope.response = "";
                             // Notify about the response availability
@@ -69,8 +76,9 @@
 
                     }).then(function (widgetId) {
                         // The widget has been created
-                        if(ctrl){
-                            ctrl.$setValidity('recaptcha',false);
+                    	if (ctrl) {
+		                    var valid = (scope.required !== undefined) ? !scope.required : false;
+		                    ctrl.$setValidity('recaptcha', valid);
                         }
                         scope.widgetId = widgetId;
                         scope.onCreate({widgetId: widgetId});
