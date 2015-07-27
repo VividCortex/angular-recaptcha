@@ -40,6 +40,12 @@
                     $scope.widgetId = widgetId;
                 };
 
+                $scope.cbExpiration = function() {
+                    console.info('Captcha expired. Resetting response object');
+
+                    $scope.response = null;
+                 };
+
                 $scope.submit = function () {
                     var valid;
 
@@ -84,6 +90,7 @@
                 key="model.key"
                 on-create="setWidgetId(widgetId)"
                 on-success="setResponse(response)"
+                on-expire="cbExpiration()"
             ></div>
             <button class="btn" type="submit">Submit</button>
         </form>

@@ -99,11 +99,11 @@ In this case we are specifying that the captcha should use the theme named _ligh
 Listeners
 ---------
 
-There are two listeners you can use with the directive, `on-create` and `on-success`.
+There are three listeners you can use with the directive, `on-create`, `on-success`, and `on-expire`.
 
 * __on-create__: It's called right after the widget is created. It receives a widget ID, which could be helpful if you have more than one reCaptcha in your site.
 * __on-success__: It's called once the user resolves the captcha. It receives the response string you would need for verifying the response.
-
+* __on-expire__: It's called when the captcha response expires and the user needs to solve a new captcha.
 
 ```html
 <div
@@ -111,6 +111,7 @@ There are two listeners you can use with the directive, `on-create` and `on-succ
     key="'---- YOUR PUBLIC KEY GOES HERE ----'"
     on-create="setWidgetId(widgetId)"
     on-success="setResponse(response)"
+    on-expire="cbExpiration()"
 ></div>
 ```
 
@@ -126,6 +127,10 @@ app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope
 
     $scope.setResponse = function (response) {
         // send the `response` to your server for verification.
+    };
+    
+    $scope.cbExpiration = function() {
+        // reset the 'response' object that is on scope 
     };
 }]);
 ```
