@@ -30,6 +30,7 @@
 
                 scope.widgetId = null;
 
+                var sessionTimeout;
                 var removeCreationListener = scope.$watch('key', function (key) {
                     if (!key) {
                         return;
@@ -51,7 +52,7 @@
                         });
 
                         // captcha session lasts 2 mins after set.
-                        $timeout(function (){
+                        sessionTimeout = $timeout(function (){
                             if(ctrl){
                                 ctrl.$setValidity('recaptcha',false);
                             }
@@ -75,13 +76,26 @@
                         scope.widgetId = widgetId;
                         scope.onCreate({widgetId: widgetId});
 
-                        scope.$on('$destroy', cleanup);
+                        scope.$on('$destroy', destroy);
 
                     });
 
                     // Remove this listener to avoid creating the widget more than once.
                     removeCreationListener();
                 });
+
+                function destroy() {
+                  if (ctrl) {
+                    // reset the validity of the form if we were removed
+                    ctrl.$setValidity('recaptcha', null);
+                  }
+                  if (sessionTimeout) {
+                    // don't trigger the session timeout if we are no longer active
+                    $timeout.cancel(sessionTimeout);
+                    sessionTimeout = null;
+                  }
+                  cleanup();
+                }
 
                 function cleanup(){
                   // removes elements reCaptcha added.
