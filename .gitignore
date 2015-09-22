@@ -1,5 +1,6 @@
 # IDE Files
 .idea/*
+angular-recaptcha.iml
 
 # OS Files
 .DS_Store

@@ -43,6 +43,8 @@
                 $scope.cbExpiration = function() {
                     console.info('Captcha expired. Resetting response object');
 
+                    vcRecaptchaService.reload($scope.widgetId);
+
                     $scope.response = null;
                  };
 
