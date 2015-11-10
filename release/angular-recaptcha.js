@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2015-08-26 
+ * angular-recaptcha build:2015-11-10 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2015 VividCortex 
 **/
@@ -181,6 +181,10 @@
 
                         scope.$on('$destroy', destroy);
 
+                        // if fallback mode
+                        elm.find('textArea').on('paste', function(evt) {
+                            callback(evt.target.value);
+                        });
                     });
 
                     // Remove this listener to avoid creating the widget more than once.
@@ -191,6 +195,8 @@
                   if (ctrl) {
                     // reset the validity of the form if we were removed
                     ctrl.$setValidity('recaptcha', null);
+                    // if in fallback mode
+                    elm.find('textArea').off('paste');
                   }
                   if (sessionTimeout) {
                     // don't trigger the session timeout if we are no longer active
