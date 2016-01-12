@@ -124,7 +124,8 @@
                 tabindex: '=?',
                 onCreate: '&',
                 onSuccess: '&',
-                onExpire: '&'
+                onExpire: '&',
+                timeout: '=?' // default captcha session lasts 2 mins after set.
             },
             link: function (scope, elm, attrs, ctrl) {
                 if (!attrs.hasOwnProperty('key')) {
@@ -146,23 +147,24 @@
                     var callback = function (gRecaptchaResponse) {
                         // Safe $apply
                         $timeout(function () {
-                            if(ctrl){
-                                ctrl.$setValidity('recaptcha',true);
+                            if (ctrl) {
+                                ctrl.$setValidity('recaptcha', true);
                             }
                             scope.response = gRecaptchaResponse;
                             // Notify about the response availability
-                            scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
+                            scope.onSuccess({ response: gRecaptchaResponse, widgetId: scope.widgetId });
                         });
 
-                        // captcha session lasts 2 mins after set.
-                        sessionTimeout = $timeout(function (){
-                            if(ctrl){
-                                ctrl.$setValidity('recaptcha',false);
+                        var timeoutMS = angular.isDefined(scope.timeout) ? scope.timeout : 1200;
+
+                        sessionTimeout = $timeout(function () {
+                            if (ctrl) {
+                                ctrl.$setValidity('recaptcha', false);
                             }
                             scope.response = "";
                             // Notify about the response availability
-                            scope.onExpire({widgetId: scope.widgetId});
-                        }, 2 * 60 * 1000);
+                            scope.onExpire({ widgetId: scope.widgetId });    
+                        }, timeoutMS);
                     };
 
                     vcRecaptcha.create(elm[0], key, callback, {
@@ -173,11 +175,11 @@
 
                     }).then(function (widgetId) {
                         // The widget has been created
-                        if(ctrl){
-                            ctrl.$setValidity('recaptcha',false);
+                        if (ctrl) {
+                            ctrl.$setValidity('recaptcha', false);
                         }
                         scope.widgetId = widgetId;
-                        scope.onCreate({widgetId: widgetId});
+                        scope.onCreate({ widgetId: widgetId });
 
                         scope.$on('$destroy', destroy);
 
@@ -188,21 +190,21 @@
                 });
 
                 function destroy() {
-                  if (ctrl) {
-                    // reset the validity of the form if we were removed
-                    ctrl.$setValidity('recaptcha', null);
-                  }
-                  if (sessionTimeout) {
-                    // don't trigger the session timeout if we are no longer active
-                    $timeout.cancel(sessionTimeout);
-                    sessionTimeout = null;
-                  }
-                  cleanup();
+                    if (ctrl) {
+                        // reset the validity of the form if we were removed
+                        ctrl.$setValidity('recaptcha', null);
+                    }
+                    if (sessionTimeout) {
+                        // don't trigger the session timeout if we are no longer active
+                        $timeout.cancel(sessionTimeout);
+                        sessionTimeout = null;
+                    }
+                    cleanup();
                 }
 
-                function cleanup(){
-                  // removes elements reCaptcha added.
-                  angular.element($document[0].querySelectorAll('.pls-container')).parent().remove();
+                function cleanup() {
+                    // removes elements reCaptcha added.
+                    angular.element($document[0].querySelectorAll('.pls-container')).parent().remove();
                 }
             }
         };
