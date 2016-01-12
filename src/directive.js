@@ -21,7 +21,8 @@
                 tabindex: '=?',
                 onCreate: '&',
                 onSuccess: '&',
-                onExpire: '&'
+                onExpire: '&',
+				timeout: '=?'
             },
             link: function (scope, elm, attrs, ctrl) {
                 if (!attrs.hasOwnProperty('key')) {
@@ -31,6 +32,8 @@
                 scope.widgetId = null;
 
                 var sessionTimeout;
+   
+				
                 var removeCreationListener = scope.$watch('key', function (key) {
                     if (!key) {
                         return;
@@ -50,8 +53,10 @@
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
                         });
-
-                        // captcha session lasts 2 mins after set.
+						
+						//default 2 minutes
+						var timeoutMS = angular.isDefined(scope.timeout) ? scope.timeout : 120000;
+                      
                         sessionTimeout = $timeout(function (){
                             if(ctrl){
                                 ctrl.$setValidity('recaptcha',false);
@@ -59,7 +64,7 @@
                             scope.response = "";
                             // Notify about the response availability
                             scope.onExpire({widgetId: scope.widgetId});
-                        }, 2 * 60 * 1000);
+                        }, timeoutMS);
                     };
 
                     vcRecaptcha.create(elm[0], key, callback, {
