@@ -16,6 +16,7 @@
             scope: {
                 response: '=?ngModel',
                 key: '=',
+                stoken: '=?',
                 theme: '=?',
                 size: '=?',
                 tabindex: '=?',
@@ -64,6 +65,7 @@
 
                     vcRecaptcha.create(elm[0], key, callback, {
 
+                        stoken: scope.stoken || attrs.stoken || null,
                         theme: scope.theme || attrs.theme || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
                         size: scope.size || attrs.size || null
