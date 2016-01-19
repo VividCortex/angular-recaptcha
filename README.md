@@ -135,6 +135,22 @@ app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope
 }]);
 ```
 
+Secure Token
+------------
+
+If you want to use a secure token pass it along with the site key as an html attribute.
+
+```html
+<div
+    vc-recaptcha
+    key="'---- YOUR PUBLIC KEY GOES HERE ----'"
+    stoken="'--- YOUR GENERATED SECURE TOKEN ---'"
+></div>
+```
+
+Please note that you have to enrypt your token yourself with your private key upfront!
+To learn more about secure tokens and how to generate & encrypt them please refer to the [reCAPTCHA Docs](https://developers.google.com/recaptcha/docs/secure_token).
+
 
 Differences with the old reCaptcha
 ----------------------------------
