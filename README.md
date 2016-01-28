@@ -89,8 +89,7 @@ You can optionally pass a __theme__ the captcha should use, as an html attribute
 ```html
     <div
         vc-recaptcha
-        theme="---- light or dark ----"
-        size="---- compact or normal ----"
+        theme="light"
         key="'---- YOUR PUBLIC KEY GOES HERE ----'"
     ></div>
 ```
