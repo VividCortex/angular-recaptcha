@@ -1,7 +1,7 @@
 /**
- * angular-recaptcha build:2015-08-26 
+ * angular-recaptcha build:2016-01-19 
  * https://github.com/vividcortex/angular-recaptcha 
- * Copyright (c) 2015 VividCortex 
+ * Copyright (c) 2016 VividCortex 
 **/
 
 /*global angular, Recaptcha */
@@ -119,6 +119,7 @@
             scope: {
                 response: '=?ngModel',
                 key: '=',
+                stoken: '=?',
                 theme: '=?',
                 size: '=?',
                 tabindex: '=?',
@@ -167,6 +168,7 @@
 
                     vcRecaptcha.create(elm[0], key, callback, {
 
+                        stoken: scope.stoken || attrs.stoken || null,
                         theme: scope.theme || attrs.theme || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
                         size: scope.size || attrs.size || null
