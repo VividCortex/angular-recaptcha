@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2016-01-19 
+ * angular-recaptcha build:2016-02-03 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2016 VividCortex 
 **/
@@ -24,10 +24,20 @@
     app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
-        $window.vcRecaptchaApiLoaded = function () {
+        $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
+
+        var callback = function () {
             recaptcha = $window.grecaptcha;
 
             deferred.resolve(recaptcha);
+        };
+
+        $window.vcRecaptchaApiLoadedCallback.push(callback);
+
+        $window.vcRecaptchaApiLoaded = function () {
+            $window.vcRecaptchaApiLoadedCallback.forEach(function(callback) {
+                callback();
+            });
         };
 
 
@@ -48,7 +58,7 @@
 
         // Check if grecaptcha is not defined already.
         if (ng.isDefined($window.grecaptcha)) {
-            $window.vcRecaptchaApiLoaded();
+            callback();
         }
 
         return {
