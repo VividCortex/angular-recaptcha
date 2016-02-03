@@ -10,9 +10,7 @@
     app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
-        if(ng.isUndefined($window.vcRecaptchaApiLoadedCallback)){
-            $window.vcRecaptchaApiLoadedCallback = []
-        }
+        $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
 
         var callback = function () {
             recaptcha = $window.grecaptcha;
