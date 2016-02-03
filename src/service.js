@@ -10,19 +10,21 @@
     app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
-        if(angular.isUndefined($window.vcRecaptchaApiLoaded)){
-            $window.vcRecaptchaApiLoaded = []
+        if(ng.isUndefined($window.vcRecaptchaApiLoadedCallback)){
+            $window.vcRecaptchaApiLoadedCallback = []
         }
-        
-        $window.vcRecaptchaApiLoaded.push(function () {
+
+        var callback = function () {
             recaptcha = $window.grecaptcha;
 
             deferred.resolve(recaptcha);
-        });
+        };
 
-        $window.vcRecaptchaApiLoadedCallback = function () {
-            $window.vcRecaptchaApiLoaded.forEach(function(element,index,array) {
-                element.call();
+        $window.vcRecaptchaApiLoadedCallback.push(callback);
+
+        $window.vcRecaptchaApiLoaded = function () {
+            $window.vcRecaptchaApiLoadedCallback.forEach(function(callback) {
+                callback();
             });
         };
 
@@ -44,7 +46,7 @@
 
         // Check if grecaptcha is not defined already.
         if (ng.isDefined($window.grecaptcha)) {
-            $window.vcRecaptchaApiLoadedCallback();
+            callback();
         }
 
         return {
