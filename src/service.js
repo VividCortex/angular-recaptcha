@@ -10,11 +10,21 @@
     app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
-        $window.vcRecaptchaApiLoaded = function () {
+        if(angular.isUndefined($window.vcRecaptchaApiLoaded)){
+            $window.vcRecaptchaApiLoaded = []
+        }
+        
+        $window.vcRecaptchaApiLoaded.push(function () {
             recaptcha = $window.grecaptcha;
 
             deferred.resolve(recaptcha);
-        };
+        });
+
+        $window.vcRecaptchaApiLoadedCallback = function () {
+            $window.vcRecaptchaApiLoaded.forEach(function(element,index,array) {
+                element.call();
+            });
+        }
 
 
         function getRecaptcha() {
