@@ -31,7 +31,6 @@
 
                 scope.widgetId = null;
 
-                var sessionTimeout;
                 var removeCreationListener = scope.$watch('key', function (key) {
                     if (!key) {
                         return;
@@ -51,16 +50,6 @@
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
                         });
-
-                        // captcha session lasts 2 mins after set.
-                        sessionTimeout = $timeout(function (){
-                            if(ctrl){
-                                ctrl.$setValidity('recaptcha',false);
-                            }
-                            scope.response = "";
-                            // Notify about the response availability
-                            scope.onExpire({widgetId: scope.widgetId});
-                        }, 2 * 60 * 1000);
                     };
 
                     vcRecaptcha.create(elm[0], key, callback, {
@@ -68,7 +57,8 @@
                         stoken: scope.stoken || attrs.stoken || null,
                         theme: scope.theme || attrs.theme || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
-                        size: scope.size || attrs.size || null
+                        size: scope.size || attrs.size || null,
+                        'expired-callback': expired
 
                     }).then(function (widgetId) {
                         // The widget has been created
@@ -91,12 +81,17 @@
                     // reset the validity of the form if we were removed
                     ctrl.$setValidity('recaptcha', null);
                   }
-                  if (sessionTimeout) {
-                    // don't trigger the session timeout if we are no longer active
-                    $timeout.cancel(sessionTimeout);
-                    sessionTimeout = null;
-                  }
+
                   cleanup();
+                }
+
+                function expired(){
+                    if(ctrl){
+                        ctrl.$setValidity('recaptcha',false);
+                    }
+                    scope.response = "";
+                    // Notify about the response availability
+                    scope.onExpire({widgetId: scope.widgetId});
                 }
 
                 function cleanup(){
