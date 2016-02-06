@@ -19,6 +19,7 @@
                 stoken: '=?',
                 theme: '=?',
                 size: '=?',
+                type: '=?',
                 tabindex: '=?',
                 onCreate: '&',
                 onSuccess: '&',
@@ -67,6 +68,7 @@
 
                         stoken: scope.stoken || attrs.stoken || null,
                         theme: scope.theme || attrs.theme || null,
+                        type: scope.type || attrs.type || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
                         size: scope.size || attrs.size || null
 
