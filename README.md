@@ -46,8 +46,10 @@ See [the demo file](demo/usage.html) for a quick usage example.
   async defer
 ></script>
 ```
-    As you can see, we are specifying a `onload` callback, which will notify the
-    angular service once the api is ready for usage.
+
+As you can see, we are specifying a `onload` callback, which will notify the angular service once the api is ready for usage.
+
+The `onload` callback name defaults to `vcRecaptchaApiLoaded`, but can be overridden by the service provider via `vcRecaptchaServiceProvider.setOnLoadFunctionName('myOtherFunctionName');`.
 
 - Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 

@@ -14,6 +14,7 @@
     app.provider('vcRecaptchaService', function(){
         var provider = this;
         var config = {};
+        provider.onLoadFunctionName = 'vcRecaptchaApiLoaded';
 
         /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
@@ -75,6 +76,16 @@
             config.type = type;
         };
 
+        /**
+         * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
+         *
+         * @since 2.5.0
+         * @param onLoadFunctionName  string name which overrides the name of the onload function. Should match what is in the recaptcha script querystring onload value.
+         */
+        provider.setOnLoadFunctionName = function(onLoadFunctionName){
+            provider.onLoadFunctionName = onLoadFunctionName;
+        };
+
         provider.$get = ['$window', '$q', function ($window, $q) {
             var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
@@ -88,7 +99,7 @@
 
             $window.vcRecaptchaApiLoadedCallback.push(callback);
 
-            $window.vcRecaptchaApiLoaded = function () {
+            $window[provider.onLoadFunctionName] = function () {
                 $window.vcRecaptchaApiLoadedCallback.forEach(function(callback) {
                     callback();
                 });
