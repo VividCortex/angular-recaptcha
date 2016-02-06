@@ -126,13 +126,13 @@
                  */
                 create: function (elm, conf) {
 
-                    conf.key = conf.key || config.key;
+                    conf.sitekey = conf.key || config.key;
                     conf.theme = conf.theme || config.theme;
                     conf.stoken = conf.stoken || config.stoken;
                     conf.size = conf.size || config.size;
                     conf.type = conf.type || config.type;
 
-                    if (!conf.key || conf.key.length !== 40) {
+                    if (!conf.sitekey || conf.sitekey.length !== 40) {
                         throwNoKeyException();
                     }
                     return getRecaptcha().then(function (recaptcha) {
