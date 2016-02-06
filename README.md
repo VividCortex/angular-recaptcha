@@ -70,6 +70,13 @@ var app = angular.module('myApp', ['vcRecaptcha']);
 
 Here, the `key` attribute is passed to the directive's scope, so you can use either a property in your scope or just a hardcoded string. Be careful to use your public key, not your private one.
 
+Form Validation
+---------------
+**By default**, if placed in a [form](https://docs.angularjs.org/api/ng/directive/form) using [formControl](https://docs.angularjs.org/api/ng/type/form.FormController) the captcha will need to be checked for the form to be valid.
+If the captcha is not checked (if the user has not checked the box or the check has expired) the form will be marked as invalid. The validation key is `recaptcha`.
+You can **opt out** of this feature by setting the `required` attribute to `false` or a scoped variable 
+that will evaluate to `false`. Any other value, or omitting the attribute will opt in to this feature.
+
 Response Validation
 -------------------
 
