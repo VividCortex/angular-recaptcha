@@ -21,6 +21,7 @@
                 size: '=?',
                 type: '=?',
                 tabindex: '=?',
+                required: '=?',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
@@ -31,6 +32,10 @@
                 }
 
                 scope.widgetId = null;
+
+                if(ctrl && angular.isDefined(attrs.required)){
+                    scope.$watch('required', validate);
+                }
 
                 var removeCreationListener = scope.$watch('key', function (key) {
                     if (!key) {
@@ -44,10 +49,9 @@
                     var callback = function (gRecaptchaResponse) {
                         // Safe $apply
                         $timeout(function () {
-                            if(ctrl){
-                                ctrl.$setValidity('recaptcha',true);
-                            }
                             scope.response = gRecaptchaResponse;
+                            validate();
+
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
                         });
@@ -64,9 +68,7 @@
 
                     }).then(function (widgetId) {
                         // The widget has been created
-                        if(ctrl){
-                            ctrl.$setValidity('recaptcha',false);
-                        }
+                        validate();
                         scope.widgetId = widgetId;
                         scope.onCreate({widgetId: widgetId});
 
@@ -88,12 +90,17 @@
                 }
 
                 function expired(){
-                    if(ctrl){
-                        ctrl.$setValidity('recaptcha',false);
-                    }
                     scope.response = "";
+                    validate();
+
                     // Notify about the response availability
                     scope.onExpire({widgetId: scope.widgetId});
+                }
+
+                function validate(){
+                    if(ctrl){
+                        ctrl.$setValidity('recaptcha', scope.required === false ? null : Boolean(scope.response));
+                    }
                 }
 
                 function cleanup(){
