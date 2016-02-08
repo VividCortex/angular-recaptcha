@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2016-02-03 
+ * angular-recaptcha build:2016-02-08 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2016 VividCortex 
 **/
@@ -132,7 +132,9 @@
                 stoken: '=?',
                 theme: '=?',
                 size: '=?',
+                type: '=?',
                 tabindex: '=?',
+                required: '=?',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
@@ -144,7 +146,10 @@
 
                 scope.widgetId = null;
 
-                var sessionTimeout;
+                if(ctrl && angular.isDefined(attrs.required)){
+                    scope.$watch('required', validate);
+                }
+
                 var removeCreationListener = scope.$watch('key', function (key) {
                     if (!key) {
                         return;
@@ -157,37 +162,26 @@
                     var callback = function (gRecaptchaResponse) {
                         // Safe $apply
                         $timeout(function () {
-                            if(ctrl){
-                                ctrl.$setValidity('recaptcha',true);
-                            }
                             scope.response = gRecaptchaResponse;
+                            validate();
+
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
                         });
-
-                        // captcha session lasts 2 mins after set.
-                        sessionTimeout = $timeout(function (){
-                            if(ctrl){
-                                ctrl.$setValidity('recaptcha',false);
-                            }
-                            scope.response = "";
-                            // Notify about the response availability
-                            scope.onExpire({widgetId: scope.widgetId});
-                        }, 2 * 60 * 1000);
                     };
 
                     vcRecaptcha.create(elm[0], key, callback, {
 
                         stoken: scope.stoken || attrs.stoken || null,
                         theme: scope.theme || attrs.theme || null,
+                        type: scope.type || attrs.type || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
-                        size: scope.size || attrs.size || null
+                        size: scope.size || attrs.size || null,
+                        'expired-callback': expired
 
                     }).then(function (widgetId) {
                         // The widget has been created
-                        if(ctrl){
-                            ctrl.$setValidity('recaptcha',false);
-                        }
+                        validate();
                         scope.widgetId = widgetId;
                         scope.onCreate({widgetId: widgetId});
 
@@ -204,12 +198,22 @@
                     // reset the validity of the form if we were removed
                     ctrl.$setValidity('recaptcha', null);
                   }
-                  if (sessionTimeout) {
-                    // don't trigger the session timeout if we are no longer active
-                    $timeout.cancel(sessionTimeout);
-                    sessionTimeout = null;
-                  }
+
                   cleanup();
+                }
+
+                function expired(){
+                    scope.response = "";
+                    validate();
+
+                    // Notify about the response availability
+                    scope.onExpire({widgetId: scope.widgetId});
+                }
+
+                function validate(){
+                    if(ctrl){
+                        ctrl.$setValidity('recaptcha', scope.required === false ? null : Boolean(scope.response));
+                    }
                 }
 
                 function cleanup(){
