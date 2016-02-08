@@ -86,7 +86,7 @@
             provider.onLoadFunctionName = onLoadFunctionName;
         };
 
-        provider.$get = ['$window', '$q', function ($window, $q) {
+        provider.$get = ['$rootScope','$window', '$q', function ($rootScope, $window, $q) {
             var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
             $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
@@ -160,8 +160,8 @@
                     // $log.info('Reloading captcha');
                     recaptcha.reset(widgetId);
 
-                    // reCaptcha will call the same callback provided to the
-                    // create function once this new captcha is resolved.
+                    // Let everyone know this widget has been reset.
+                    $rootScope.$broadcast('reCaptchaReset', widgetId);
                 },
 
                 /**
