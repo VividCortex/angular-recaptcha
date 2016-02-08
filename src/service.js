@@ -75,7 +75,7 @@
             config.type = type;
         };
 
-        provider.$get = ['$window', '$q', function ($window, $q) {
+        provider.$get = ['$rootScope','$window', '$q', function ($rootScope, $window, $q) {
             var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
             $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
@@ -113,6 +113,32 @@
             // Check if grecaptcha is not defined already.
             if (ng.isDefined($window.grecaptcha)) {
                 callback();
+            },
+
+            /**
+             * Reloads the reCaptcha
+             */
+            reload: function (widgetId) {
+                validateRecaptchaInstance();
+
+                // $log.info('Reloading captcha');
+                recaptcha.reset(widgetId);
+
+                // Let everyone know this widget has been reset.
+                $rootScope.$broadcast('reCaptchaReset', widgetId);
+            },
+
+            /**
+             * Gets the response from the reCaptcha widget.
+             *
+             * @see https://developers.google.com/recaptcha/docs/display#js_api
+             *
+             * @returns {String}
+             */
+            getResponse: function (widgetId) {
+                validateRecaptchaInstance();
+
+                return recaptcha.getResponse(widgetId);
             }
 
             return {
