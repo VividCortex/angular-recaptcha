@@ -75,7 +75,7 @@
                         scope.$on('$destroy', destroy);
 
                         scope.$on('reCaptchaReset', function(resetWidgetId){
-                          if(widgetId === resetWidgetId){
+                          if(angular.isUndefined(resetWidgetId) || widgetId === resetWidgetId){
                             scope.response = "";
                             validate();
                           }
