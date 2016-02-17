@@ -48,7 +48,7 @@ See [the demo file](demo/usage.html) for a quick usage example.
 ```
     As you can see, we are specifying a `onload` callback, which will notify the
     angular service once the api is ready for usage.
-    
+
 - Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 
 ```html
@@ -74,7 +74,7 @@ Form Validation
 ---------------
 **By default**, if placed in a [form](https://docs.angularjs.org/api/ng/directive/form) using [formControl](https://docs.angularjs.org/api/ng/type/form.FormController) the captcha will need to be checked for the form to be valid.
 If the captcha is not checked (if the user has not checked the box or the check has expired) the form will be marked as invalid. The validation key is `recaptcha`.
-You can **opt out** of this feature by setting the `required` attribute to `false` or a scoped variable 
+You can **opt out** of this feature by setting the `required` attribute to `false` or a scoped variable
 that will evaluate to `false`. Any other value, or omitting the attribute will opt in to this feature.
 
 Response Validation
@@ -82,11 +82,36 @@ Response Validation
 
 To validate this object from your server, you need to use the API described in the [verify section](https://developers.google.com/recaptcha/docs/verify). Validation is outside of the scope of this tool, since is mandatory to do that at the server side.
 
-To get the _response_ that you need to send to your server, use the method `getResponse()` from the `vcRecaptchaService` angular service. This method receives an optional argument _widgetId_, useful for getting the response of a specific reCaptcha widget (in case you render more than one widget). If no widget ID is provided, the response for the first created widget will be returned.
+You can simple supply a value for `ng-model` which will be dynamically populated and cleared as the _response_ becomes available and expires, respectfully. When you want the value of the response, you can grab it from the scoped variable that was passed to `ng-model`. It works just like adding `ng-model` to any other input in your form.
+
+```html
+...
+  <form name="myForm" ng-submit="mySubmit(myFields)">
+  ...
+  <div
+      vc-recaptcha
+      ng-model="myFields.myRecaptchaResponse"
+  ></div>
+  ...
+  </form>
+...
+```
 
 ```js
-var response = vcRecaptchaService.getResponse(); // returns the string response
+  ...
+  $scope.mySubmit = function(myFields){
+    console.log(myFields.myRecaptchaResponse);
+  }
+  ...
 ```
+
+Or you can programmatically get the _response_ that you need to send to your server, use the method `getResponse()` from the `vcRecaptchaService` angular service. This method receives an optional argument _widgetId_, useful for getting the response of a specific reCaptcha widget (in case you render more than one widget). If no widget ID is provided, the response for the first created widget will be returned.
+
+```js
+var response = vcRecaptchaService.getResponse(widgetId); // returns the string response
+```
+
+Using `ng-model` is recommended for normal use as the value is tied directly to the reCaptcha instance through the directive and there is no need to manage or pass a _widgetId_.
 
 Other Parameters
 ----------------
@@ -96,6 +121,7 @@ You can optionally pass a __theme__ the captcha should use, as an html attribute
 ```html
     <div
         vc-recaptcha
+        ng-model="gRecaptchaResponse"
         theme="---- light or dark ----"
         size="---- compact or normal ----"
         type="'---- audio or image ----'"
@@ -118,6 +144,7 @@ There are three listeners you can use with the directive, `on-create`, `on-succe
 <div
     vc-recaptcha
     key="'---- YOUR PUBLIC KEY GOES HERE ----'"
+    ng-model="gRecaptchaResponse"
     on-create="setWidgetId(widgetId)"
     on-success="setResponse(response)"
     on-expire="cbExpiration()"
@@ -137,9 +164,9 @@ app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope
     $scope.setResponse = function (response) {
         // send the `response` to your server for verification.
     };
-    
+
     $scope.cbExpiration = function() {
-        // reset the 'response' object that is on scope 
+        // reset the 'response' object that is on scope
     };
 }]);
 ```
@@ -157,7 +184,7 @@ If you want to use a secure token pass it along with the site key as an html att
 ></div>
 ```
 
-Please note that you have to enrypt your token yourself with your private key upfront!
+Please note that you have to encrypt your token yourself with your private key upfront!
 To learn more about secure tokens and how to generate & encrypt them please refer to the [reCAPTCHA Docs](https://developers.google.com/recaptcha/docs/secure_token).
 
 
@@ -180,6 +207,6 @@ Recent Changelog
 - 2.0.0 - Rewritten service to support new reCaptcha
 - 1.0.2 - added extra `Recaptcha` object methods to the service, i.e. `switch_type`, `showhelp`, etc.
 - 1.0.0 - the `key` attribute is now a scope property of the directive
-- Added the ```destroy()``` method to the service. Thanks to @endorama.
+- Added the `destroy()` method to the service. Thanks to @endorama.
 - We added a different integration method (see demo/2.html) which is safer because it doesn't relies on a timeout on the reload event of the recaptcha. Thanks to [@sboisse](https://github.com/sboisse) for reporting the issue and suggesting the solution.
-- The release is now built using [GruntJS](http://gruntjs.com/) so if you were using the source files (the ```src``` directory) in your projects you should now use the files in the release directory.
+- The release is now built using [GruntJS](http://gruntjs.com/) so if you were using the source files (the `src` directory) in your projects you should now use the files in the release directory.
