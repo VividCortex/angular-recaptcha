@@ -7,7 +7,7 @@
     /**
      * An angular service to wrap the reCaptcha API
      */
-    app.service('vcRecaptchaService', ['$window', '$q', function ($window, $q) {
+    app.service('vcRecaptchaService', ['$rootScope', '$window', '$q', function ($rootScope, $window, $q) {
         var deferred = $q.defer(), promise = deferred.promise, recaptcha;
 
         $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
@@ -75,8 +75,8 @@
                 // $log.info('Reloading captcha');
                 recaptcha.reset(widgetId);
 
-                // reCaptcha will call the same callback provided to the
-                // create function once this new captcha is resolved.
+                // Let everyone know this widget has been reset.
+                $rootScope.$broadcast('reCaptchaReset', widgetId);
             },
 
             /**
