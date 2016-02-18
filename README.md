@@ -187,6 +187,35 @@ If you want to use a secure token pass it along with the site key as an html att
 Please note that you have to encrypt your token yourself with your private key upfront!
 To learn more about secure tokens and how to generate & encrypt them please refer to the [reCAPTCHA Docs](https://developers.google.com/recaptcha/docs/secure_token).
 
+Service Provider
+----------------
+You can use the vcRecaptchaServiceProvider to configure the recaptcha service once in your application's config function.
+This is a convenient way to set your reCaptcha site key, theme, stoken, size, and type in one place instead of each vc-recaptcha directive element instance.
+The defaults defined in the service provider will be overrode by any values passed to the vc-recaptcha directive element for that instance.
+
+```javascript
+myApp.config(function(vcRecaptchaServiceProvider){
+  vcRecaptchaServiceProvider.setSiteKey('---- YOUR PUBLIC KEY GOES HERE ----')
+  vcRecaptchaServiceProvider.setTheme('---- light or dark ----')
+  vcRecaptchaServiceProvider.setStoken('--- YOUR GENERATED SECURE TOKEN ---')
+  vcRecaptchaServiceProvider.setSize('---- compact or normal ----')
+  vcRecaptchaServiceProvider.setType('---- audio or image ----')
+});
+```
+
+You can also set all of the values at once.
+
+```javascript
+myApp.config(function(vcRecaptchaServiceProvider){
+  vcRecaptchaServiceProvider.setDefaults({
+  key: '---- YOUR PUBLIC KEY GOES HERE ----',
+  theme: '---- light or dark ----',
+  stoken: '--- YOUR GENERATED SECURE TOKEN ---',
+  size: '---- compact or normal ----',
+  type: '---- audio or image ----'
+});
+```
+Note: any value omitted will be undefined, even if previously set.
 
 Differences with the old reCaptcha
 ----------------------------------

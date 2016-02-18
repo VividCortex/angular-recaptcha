@@ -2,10 +2,6 @@
 (function (ng) {
     'use strict';
 
-    function throwNoKeyException() {
-        throw new Error('You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create');
-    }
-
     var app = ng.module('vcRecaptcha');
 
     app.directive('vcRecaptcha', ['$document', '$timeout', 'vcRecaptchaService', function ($document, $timeout, vcRecaptcha) {
@@ -15,7 +11,7 @@
             require: "?^^form",
             scope: {
                 response: '=?ngModel',
-                key: '=',
+                key: '=?',
                 stoken: '=?',
                 theme: '=?',
                 size: '=?',
@@ -27,10 +23,6 @@
                 onExpire: '&'
             },
             link: function (scope, elm, attrs, ctrl) {
-                if (!attrs.hasOwnProperty('key')) {
-                    throwNoKeyException();
-                }
-
                 scope.widgetId = null;
 
                 if(ctrl && angular.isDefined(attrs.required)){
@@ -38,14 +30,6 @@
                 }
 
                 var removeCreationListener = scope.$watch('key', function (key) {
-                    if (!key) {
-                        return;
-                    }
-
-                    if (key.length !== 40) {
-                        throwNoKeyException();
-                    }
-
                     var callback = function (gRecaptchaResponse) {
                         // Safe $apply
                         $timeout(function () {
@@ -57,8 +41,10 @@
                         });
                     };
 
-                    vcRecaptcha.create(elm[0], key, callback, {
+                    vcRecaptcha.create(elm[0], {
 
+                        callback: callback,
+                        key: key,
                         stoken: scope.stoken || attrs.stoken || null,
                         theme: scope.theme || attrs.theme || null,
                         type: scope.type || attrs.type || null,
