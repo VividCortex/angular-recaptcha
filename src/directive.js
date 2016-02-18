@@ -60,6 +60,13 @@
 
                         scope.$on('$destroy', destroy);
 
+                        scope.$on('reCaptchaReset', function(resetWidgetId){
+                          if(angular.isUndefined(resetWidgetId) || widgetId === resetWidgetId){
+                            scope.response = "";
+                            validate();
+                          }
+                        })
+
                     });
 
                     // Remove this listener to avoid creating the widget more than once.
