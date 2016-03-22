@@ -45,13 +45,24 @@ describe('service', function()
             _windowMock.vcRecaptchaApiLoaded();
 
             var _element = '<div></div>';
-            var _key = 'abc123456';
+            var _key = '1234567890123456789012345678901234567890';
             var _fn = angular.noop;
             var _conf = {};
 
-            var _confRender = {sitekey: _key, callback: _fn}
+            var _confRender = {
+                sitekey: _key,
+                key: _key,
+                callback: _fn,
+                theme: undefined,
+                stoken: undefined,
+                size: undefined,
+                type: undefined
+            }
 
-            _vcRecaptchaService.create(_element, _key, _fn, _conf);
+            _vcRecaptchaService.create(_element, {
+                key: _key,
+                callback: _fn,
+            });
 
             _rootScope.$digest();
 

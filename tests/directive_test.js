@@ -131,9 +131,9 @@ describe('directive: vcRecaptcha', function()
 
         it('should change the validation to true - first timeout flushed', function()
         {
-            var _fakeCreate = function(element, key, cb, options)
+            var _fakeCreate = function(element, config)
             {
-                cb('response from google');
+                config.callback('response from google');
 
                 return {
                     then: function(cb)
@@ -172,9 +172,10 @@ describe('directive: vcRecaptcha', function()
 
         it('should change the validation to false - session expired', function()
         {
-            var _fakeCreate = function(element, key, cb, options)
+            var _fakeCreate = function(element, config)
             {
-                cb('response from google');
+                // Call the expiration callback as recaptcha would do.
+                config['expired-callback']();
 
                 return {
                     then: function(cb)
@@ -213,9 +214,9 @@ describe('directive: vcRecaptcha', function()
 
         it('should call the onSuccess callback with the right params', function()
         {
-            var _fakeCreate = function(element, key, cb, options)
+            var _fakeCreate = function(element, config)
             {
-                cb('response from google');
+                config.callback('response from google');
 
                 return {
                     then: function(cb)
@@ -247,15 +248,7 @@ describe('directive: vcRecaptcha', function()
 
             _scope.$digest();
 
-            _timeoutMock.flush(TIMEOUT_SESSION_CAPTCHA - 1);
-
-            expect(_form.$valid).toBeTruthy();
-
-            _timeoutMock.flush(TIMEOUT_SESSION_CAPTCHA + 1);
-
-            expect(_form.$valid).toBeFalsy(); // widgetCreated
-
-            expect(_vcRecaptchaService.create).toHaveBeenCalled();
+            _timeoutMock.flush();
 
             expect(_element.scope().onSuccess).toHaveBeenCalledWith({response: 'response from google', widgetId: undefined});
         })
