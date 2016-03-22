@@ -44,19 +44,20 @@ module.exports = function (grunt) {
                 gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d' // options to use with '$ git describe'
             }
         },
-        karma:
-        {
-            unit:
-            {
+        karma: {
+            unit: {
                 configFile: 'karma.conf.js',
                 browsers: ['Chrome'],
                 singleRun: true
+            },
+            ci: {
+                configFile: 'karma.conf.js',
+                browsers: ['Chrome', 'Firefox', 'FirefoxNightly'],
+                singleRun: true
             }
         },
-        coveralls:
-        {
-            options:
-            {
+        coveralls: {
+            options: {
                 coverageDir: 'coverage'
             }
         }

@@ -10,4 +10,4 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 
 script:
-  - grunt test
+  - grunt karma:ci
