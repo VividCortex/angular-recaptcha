@@ -1,101 +1,66 @@
-"use strict";
+describe('service', function () {
+    'use strict';
 
-describe('service', function()
-{
-    var _rootScope, _vcRecaptchaService, _windowMock;
+    var vcRecaptchaService, $window;
 
-    beforeEach(module('vcRecaptcha', function($provide)
-    {
-        $provide.constant('$window',
-        {
-            grecaptcha:
-            {
-                render: angular.noop,
-                getResponse: angular.noop,
-                reset: angular.noop
-            }
+    beforeEach(module('vcRecaptcha', function ($provide) {
+        $provide.constant('$window', {
+            grecaptcha: jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset'])
         });
     }));
 
-    beforeEach(inject(function($injector)
-    {
-        _rootScope = $injector.get('$rootScope');
+    beforeEach(inject(function (_vcRecaptchaService_, _$window_) {
+        vcRecaptchaService = _vcRecaptchaService_;
+        $window            = _$window_;
 
-        _vcRecaptchaService = $injector.get('vcRecaptchaService');
-        _windowMock = $injector.get('$window');
-
-        spyOn(_windowMock, 'vcRecaptchaApiLoaded').and.callThrough();
+        $window.vcRecaptchaApiLoaded = jasmine.createSpy('vcRecaptchaApiLoaded');
     }));
 
-    describe('init', function()
-    {
-        it('should have vcRecaptchaApiLoaded available globally', function()
-        {
-            expect(_windowMock.vcRecaptchaApiLoaded).toBeDefined();
-            expect(typeof _windowMock.vcRecaptchaApiLoaded).toEqual('function');
-        })
-    })
+    describe('create', function () {
+        it('should call recaptcha.render', inject(function ($rootScope) {
+            var _element    = '<div></div>',
+                _key        = '1234567890123456789012345678901234567890',
+                _fn         = angular.noop,
+                _confRender = {
+                    sitekey: _key,
+                    key: _key,
+                    callback: _fn,
+                    theme: undefined,
+                    stoken: undefined,
+                    size: undefined,
+                    type: undefined
+                };
 
-    describe('create', function()
-    {
-        it('should call recaptcha.render', function()
-        {
-            spyOn(_windowMock.grecaptcha, 'render').and.callThrough();
+            $window.vcRecaptchaApiLoaded();
 
-            _windowMock.vcRecaptchaApiLoaded();
-
-            var _element = '<div></div>';
-            var _key = '1234567890123456789012345678901234567890';
-            var _fn = angular.noop;
-            var _conf = {};
-
-            var _confRender = {
-                sitekey: _key,
-                key: _key,
-                callback: _fn,
-                theme: undefined,
-                stoken: undefined,
-                size: undefined,
-                type: undefined
-            }
-
-            _vcRecaptchaService.create(_element, {
-                key: _key,
-                callback: _fn,
+            vcRecaptchaService.create(_element, {
+                key: _confRender.key,
+                callback: _fn
             });
 
-            _rootScope.$digest();
+            $rootScope.$digest();
 
-            expect(_windowMock.grecaptcha.render).toHaveBeenCalledWith(_element, _confRender);
-        })
-    })
+            expect($window.grecaptcha.render).toHaveBeenCalledWith(_element, _confRender);
+        }));
+    });
 
-    describe('reload', function()
-    {
-        it('should call reset', function()
-        {
+    describe('reload', function () {
+        it('should call reset', function () {
             var _widgetId = 123;
 
-            spyOn(_windowMock.grecaptcha, 'reset').and.callThrough();
+            vcRecaptchaService.reload(_widgetId);
 
-            _vcRecaptchaService.reload(_widgetId);
+            expect($window.grecaptcha.reset).toHaveBeenCalledWith(_widgetId);
+        });
+    });
 
-            expect(_windowMock.grecaptcha.reset).toHaveBeenCalledWith(_widgetId);
-        })
-    })
-
-    describe('getResponse', function()
-    {
-        it('should call getResponse', function()
-        {
+    describe('getResponse', function () {
+        it('should call getResponse', function () {
             var _widgetId = 123;
 
-            spyOn(_windowMock.grecaptcha, 'getResponse').and.callThrough();
+            vcRecaptchaService.getResponse(_widgetId);
 
-            _vcRecaptchaService.getResponse(_widgetId);
-
-            expect(_windowMock.grecaptcha.getResponse).toHaveBeenCalledWith(_widgetId);
-        })
-
-    })
-})
+            expect($window.grecaptcha.getResponse).toHaveBeenCalledWith(_widgetId);
+        });
+    });
+});
