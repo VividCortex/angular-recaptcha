@@ -23,7 +23,7 @@
          * @param defaults  object which overrides the current defaults object.
          */
         provider.setDefaults = function(defaults){
-            angular.copy(config, defaults);
+            ng.copy(config, defaults);
         };
 
         /**
