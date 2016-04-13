@@ -83,11 +83,14 @@
                 }
 
                 function expired(){
-                    scope.response = "";
-                    validate();
+                    // Safe $apply
+                    $timeout(function () {
+                        scope.response = "";
+                        validate();
 
-                    // Notify about the response availability
-                    scope.onExpire({widgetId: scope.widgetId});
+                        // Notify about the response availability
+                        scope.onExpire({ widgetId: scope.widgetId });
+                    });
                 }
 
                 function validate(){
