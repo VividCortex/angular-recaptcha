@@ -1,6 +1,6 @@
 {
     "name": "angular-recaptcha",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "keywords": ["angular", "captcha", "recaptcha", "vividcortex", "human", "form", "validation", "signup", "security", "login"],
     "main": "release/angular-recaptcha.js",
     "ignore": [
