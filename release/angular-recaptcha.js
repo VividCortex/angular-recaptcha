@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2016-04-11 
+ * angular-recaptcha build:2016-04-12 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2016 VividCortex 
 **/
@@ -37,7 +37,7 @@
          * @param defaults  object which overrides the current defaults object.
          */
         provider.setDefaults = function(defaults){
-            angular.copy(config, defaults);
+            ng.copy(config, defaults);
         };
 
         /**
@@ -224,7 +224,7 @@
             link: function (scope, elm, attrs, ctrl) {
                 scope.widgetId = null;
 
-                if(ctrl && angular.isDefined(attrs.required)){
+                if(ctrl && ng.isDefined(attrs.required)){
                     scope.$watch('required', validate);
                 }
 
@@ -260,7 +260,7 @@
                         scope.$on('$destroy', destroy);
 
                         scope.$on('reCaptchaReset', function(event, resetWidgetId){
-                          if(angular.isUndefined(resetWidgetId) || widgetId === resetWidgetId){
+                          if(ng.isUndefined(resetWidgetId) || widgetId === resetWidgetId){
                             scope.response = "";
                             validate();
                           }
@@ -282,11 +282,14 @@
                 }
 
                 function expired(){
-                    scope.response = "";
-                    validate();
+                    // Safe $apply
+                    $timeout(function () {
+                        scope.response = "";
+                        validate();
 
-                    // Notify about the response availability
-                    scope.onExpire({widgetId: scope.widgetId});
+                        // Notify about the response availability
+                        scope.onExpire({ widgetId: scope.widgetId });
+                    });
                 }
 
                 function validate(){
@@ -297,7 +300,7 @@
 
                 function cleanup(){
                   // removes elements reCaptcha added.
-                  angular.element($document[0].querySelectorAll('.pls-container')).parent().remove();
+                  ng.element($document[0].querySelectorAll('.pls-container')).parent().remove();
                 }
             }
         };
