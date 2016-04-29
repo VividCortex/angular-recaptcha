@@ -37,19 +37,8 @@ See [the demo file](demo/usage.html) for a quick usage example.
     your browser.
 
 - First, you need to get a valid recaptcha key for your domain. Go to http://www.google.com/recaptcha.
-
-- Include the reCaptcha [API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
-
-```html
-<script
-  src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"
-  async defer
-></script>
-```
-    As you can see, we are specifying a `onload` callback, which will notify the
-    angular service once the api is ready for usage.
     
-- Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
+- Include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 
 ```html
 <script type="text/javascript" src="angular-recaptcha.js"></script>
@@ -69,6 +58,8 @@ var app = angular.module('myApp', ['vcRecaptcha']);
 ```
 
 Here, the `key` attribute is passed to the directive's scope, so you can use either a property in your scope or just a hardcoded string. Be careful to use your public key, not your private one.
+
+####Note - As of 2.3, you do not need to include a script reference to reCaptcha
 
 Response Validation
 -------------------
@@ -90,11 +81,14 @@ You can optionally pass a __theme__ the captcha should use, as an html attribute
     <div
         vc-recaptcha
         theme="light"
+        language="selectedLanguage"
         key="'---- YOUR PUBLIC KEY GOES HERE ----'"
     ></div>
 ```
 
 In this case we are specifying that the captcha should use the theme named _light_.
+
+You can also bind to a dynamically set __language__. When the language is changed, the directive will reload the widget in the appropriate language. Here we are binding to _selectedLanguage_ on the controller. Consult [Google's Documentation](https://developers.google.com/recaptcha/docs/language) for a list of supported language codes.
 
 Listeners
 ---------
@@ -150,6 +144,7 @@ Differences with the old reCaptcha
 Recent Changelog
 ----------------
 
+- 2.3.0 - Added language binding support
 - 2.2.3 - Removed _cleanup_ after creating the captcha element.
 - 2.0.1 - Fixed onload when using ng-route and recaptcha is placed in a secondary view.
 - 2.0.0 - Rewritten service to support new reCaptcha
