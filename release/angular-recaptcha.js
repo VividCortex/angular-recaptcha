@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2016-04-12 
+ * angular-recaptcha build:2016-05-19 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2016 VividCortex 
 **/
@@ -296,6 +296,7 @@
                     if(ctrl){
                         ctrl.$setValidity('recaptcha', scope.required === false ? null : Boolean(scope.response));
                     }
+                    scope.$apply;
                 }
 
                 function cleanup(){
