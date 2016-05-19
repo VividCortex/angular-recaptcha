@@ -97,6 +97,7 @@
                     if(ctrl){
                         ctrl.$setValidity('recaptcha', scope.required === false ? null : Boolean(scope.response));
                     }
+                    scope.$apply;
                 }
 
                 function cleanup(){
