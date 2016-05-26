@@ -60,6 +60,12 @@
 
                         scope.$on('$destroy', destroy);
 
+                        elm.find('textArea').on('paste', function(evt) {
+                          $timeout(function() {
+                            callback(evt.target.value);
+                          });
+                        });
+
                         scope.$on('reCaptchaReset', function(event, resetWidgetId){
                           if(ng.isUndefined(resetWidgetId) || widgetId === resetWidgetId){
                             scope.response = "";
@@ -77,6 +83,7 @@
                   if (ctrl) {
                     // reset the validity of the form if we were removed
                     ctrl.$setValidity('recaptcha', null);
+                    elm.find('textArea').off('paste');
                   }
 
                   cleanup();
