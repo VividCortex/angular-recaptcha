@@ -1,5 +1,5 @@
 /**
- * angular-recaptcha build:2016-04-12 
+ * angular-recaptcha build:2016-07-19 
  * https://github.com/vividcortex/angular-recaptcha 
  * Copyright (c) 2016 VividCortex 
 **/
@@ -37,7 +37,7 @@
          * @param defaults  object which overrides the current defaults object.
          */
         provider.setDefaults = function(defaults){
-            ng.copy(config, defaults);
+            ng.copy(defaults, config);
         };
 
         /**
