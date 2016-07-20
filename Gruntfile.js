@@ -5,7 +5,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json'),
         meta: {
             banner: '/**\n' +
-                ' * <%= pkg.name %> build:<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' * @license <%= pkg.name %> build:<%= grunt.template.today("yyyy-mm-dd") %>\n' +
                 ' * <%= pkg.homepage %>\n' +
                 ' * Copyright (c) <%= grunt.template.today("yyyy") %> VividCortex\n' +
                 '**/\n\n'
