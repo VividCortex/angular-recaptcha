@@ -82,7 +82,7 @@ describe('directive: vcRecaptcha', function () {
             var element     = angular.element(
                     '<form name="form">' +
                     '<input type="text" ng-model="something" />' +
-                    '<div vc-recaptcha key="key" on-create="onCreate({widgetId: widgetId})" />' +
+                    '<div vc-recaptcha key="key" required="true" on-create="onCreate({widgetId: widgetId})" />' +
                     '</form>'
                 ),
 
@@ -134,7 +134,7 @@ describe('directive: vcRecaptcha', function () {
         it('should change the validation to false - session expired', function () {
             var element     = angular.element('<form name="form">' +
                     '<input type="text" ng-model="something" />' +
-                    '<div vc-recaptcha key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
+                    '<div vc-recaptcha required="true" key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
                     '</form>'),
 
                 _fakeCreate = function (element, config) {
