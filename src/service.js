@@ -142,6 +142,7 @@
                     conf.stoken = conf.stoken || config.stoken;
                     conf.size = conf.size || config.size;
                     conf.type = conf.type || config.type;
+                    conf.tabindex = conf.tabindex || config.tabindex;
 
                     if (!conf.sitekey || conf.sitekey.length !== 40) {
                         throwNoKeyException();
