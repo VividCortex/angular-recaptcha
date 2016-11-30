@@ -110,7 +110,7 @@
         };
 
         provider.$get = ['$rootScope','$window', '$q', function ($rootScope, $window, $q) {
-            var deferred = $q.defer(), promise = deferred.promise, recaptcha;
+            var deferred = $q.defer(), promise = deferred.promise, instances = {}, recaptcha;
 
             $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
 
@@ -138,7 +138,7 @@
             }
 
             function validateRecaptchaInstance() {
-                if (!recaptcha || !window.___grecaptcha_cfg) {
+                if (!recaptcha) {
                     throw new Error('reCaptcha has not been loaded yet.');
                 }
             }
@@ -171,7 +171,9 @@
                         throwNoKeyException();
                     }
                     return getRecaptcha().then(function (recaptcha) {
-                        return recaptcha.render(elm, conf);
+                        var widgetId = recaptcha.render(elm, conf);
+                        instances[widgetId] = elm;
+                        return widgetId;
                     });
                 },
 
@@ -188,14 +190,35 @@
                 },
 
                 /**
-                 * Set reCaptcha language
+                 * Get/Set reCaptcha language
                  */
-                setLang: function (widgetId, lang) {
-                    var cli = window.___grecaptcha_cfg.clients[widgetId];
-                    if (cli) {
-                        var wk = cli.W.wk;
-                        wk.lang = wk.hl = lang;
-                        this.reload(widgetId);
+                useLang: function (widgetId, lang) {
+                    var instance = instances[widgetId];
+
+                    if (instance) {
+                        var iframe = instance.querySelector('iframe');
+                        if (lang) {
+                            // Setter
+                            if (iframe && iframe.src) {
+                                var s = iframe.src;
+                                if (/[?&]hl=/.test(s)) {
+                                    s = s.replace(/([?&]hl=)\w+/, '$1' + lang);
+                                } else {
+                                    s += ((s.indexOf('?') === -1) ? '?' : '&') + 'hl=' + lang;
+                                }
+
+                                iframe.src = s;
+                            }
+                        } else {
+                            // Getter
+                            if (iframe && iframe.src && /[?&]hl=\w+/.test(iframe.src)) {
+                                return iframe.src.replace(/[?&]hl=(\w+)/, '$1');
+                            } else {
+                                return null;
+                            }
+                        }
+                    } else {
+                        throw new Error('reCaptcha Widget ID not exists', widgetId);
                     }
                 },
 
@@ -210,6 +233,20 @@
                     validateRecaptchaInstance();
 
                     return recaptcha.getResponse(widgetId);
+                },
+
+                /**
+                 * Gets reCaptcha instance and configuration
+                 */
+                getInstance: function (widgetId) {
+                    return instances[widgetId];
+                },
+
+                /**
+                 * Destroy reCaptcha instance.
+                 */
+                destroy: function (widgetId) {
+                    delete instances[widgetId];
                 }
             };
 
@@ -322,6 +359,8 @@
                 }
 
                 function cleanup(){
+                  vcRecaptcha.destroy(scope.widgetId);
+
                   // removes elements reCaptcha added.
                   ng.element($document[0].querySelectorAll('.pls-container')).parent().remove();
                 }

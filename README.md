@@ -156,6 +156,7 @@ There are three listeners you can use with the directive, `on-create`, `on-succe
     on-create="setWidgetId(widgetId)"
     on-success="setResponse(response)"
     on-expire="cbExpiration()"
+    lang=""
 ></div>
 ```
 
@@ -219,12 +220,13 @@ You can also set all of the values at once.
 ```javascript
 myApp.config(function(vcRecaptchaServiceProvider){
   vcRecaptchaServiceProvider.setDefaults({
-  key: '---- YOUR PUBLIC KEY GOES HERE ----',
-  theme: '---- light or dark ----',
-  stoken: '--- YOUR GENERATED SECURE TOKEN ---',
-  size: '---- compact or normal ----',
-  type: '---- audio or image ----',
-  lang: '---- language code ----'
+    key: '---- YOUR PUBLIC KEY GOES HERE ----',
+    theme: '---- light or dark ----',
+    stoken: '--- YOUR GENERATED SECURE TOKEN ---',
+    size: '---- compact or normal ----',
+    type: '---- audio or image ----',
+    lang: '---- language code ----'
+  });
 });
 ```
 Note: any value omitted will be undefined, even if previously set.
