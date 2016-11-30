@@ -5,6 +5,13 @@
   "author": "VividCortex",
   "license": "MIT",
   "homepage": "https://github.com/vividcortex/angular-recaptcha",
+  "contributors": [
+    {
+      "name" : "Eduardo Daniel Cuomo",
+      "email" : "reduardo7@gmail.com",
+      "url" : "https://github.com/reduardo7/angular-recaptcha"
+    }
+  ],
   "main": "release/angular-recaptcha.js",
   "repository": {
     "type": "git",
