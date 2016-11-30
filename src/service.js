@@ -77,6 +77,15 @@
         };
 
         /**
+         * Sets the reCaptcha language which will be used by default is not specified in a specific directive instance.
+         *
+         * @param lang  The reCaptcha language.
+         */
+        provider.setLang = function(lang){
+            config.lang = lang;
+        };
+
+        /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
          *
          * @since 2.5.0
@@ -115,7 +124,7 @@
             }
 
             function validateRecaptchaInstance() {
-                if (!recaptcha) {
+                if (!recaptcha || !window.___grecaptcha_cfg) {
                     throw new Error('reCaptcha has not been loaded yet.');
                 }
             }
@@ -142,6 +151,7 @@
                     conf.stoken = conf.stoken || config.stoken;
                     conf.size = conf.size || config.size;
                     conf.type = conf.type || config.type;
+                    conf.hl = conf.lang || config.lang;
 
                     if (!conf.sitekey || conf.sitekey.length !== 40) {
                         throwNoKeyException();
@@ -157,11 +167,22 @@
                 reload: function (widgetId) {
                     validateRecaptchaInstance();
 
-                    // $log.info('Reloading captcha');
                     recaptcha.reset(widgetId);
 
                     // Let everyone know this widget has been reset.
                     $rootScope.$broadcast('reCaptchaReset', widgetId);
+                },
+
+                /**
+                 * Set reCaptcha language
+                 */
+                setLang: function (widgetId, lang) {
+                    var cli = window.___grecaptcha_cfg.clients[widgetId];
+                    if (cli) {
+                        var wk = cli.W.wk;
+                        wk.lang = wk.hl = lang;
+                        this.reload(widgetId);
+                    }
                 },
 
                 /**
