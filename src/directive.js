@@ -102,6 +102,8 @@
                 }
 
                 function cleanup(){
+                  vcRecaptcha.destroy(scope.widgetId);
+
                   // removes elements reCaptcha added.
                   ng.element($document[0].querySelectorAll('.pls-container')).parent().remove();
                 }
