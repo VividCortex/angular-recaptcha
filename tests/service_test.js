@@ -28,7 +28,8 @@ describe('service', function () {
                     theme: undefined,
                     stoken: undefined,
                     size: undefined,
-                    type: undefined
+                    type: undefined,
+                    hl: undefined
                 };
 
             $window.vcRecaptchaApiLoaded();
@@ -62,5 +63,26 @@ describe('service', function () {
 
             expect($window.grecaptcha.getResponse).toHaveBeenCalledWith(_widgetId);
         });
+    });
+
+    describe('useLang', function () {
+        it('should call useLang', inject(function ($rootScope) {
+            var _element  = angular.element('<div><iframe src="http://localhost?hl=fr"></iframe></div>')[0],
+                _key      = '1234567890123456789012345678901234567890';
+
+            $window.vcRecaptchaApiLoaded();
+
+            vcRecaptchaService.create(_element, {
+                key: _key
+            }).then(function (widgetId) {
+                var instance = vcRecaptchaService.getInstance(widgetId);
+                expect(instance).toEqual(_element);
+
+                vcRecaptchaService.useLang(widgetId, 'es');
+                expect(vcRecaptchaService.useLang(widgetId)).toEqual('es');
+            })
+
+            $rootScope.$digest();
+        }));
     });
 });

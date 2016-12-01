@@ -198,7 +198,7 @@
                         } else {
                             // Getter
                             if (iframe && iframe.src && /[?&]hl=\w+/.test(iframe.src)) {
-                                return iframe.src.replace(/.+[?&]hl=(\w+).+/, '$1');
+                                return iframe.src.replace(/.+[?&]hl=(\w+)([^\w].+)?/, '$1');
                             } else {
                                 return null;
                             }
