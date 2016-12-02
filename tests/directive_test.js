@@ -186,5 +186,32 @@ describe('directive: vcRecaptcha', function () {
                 widgetId: undefined
             });
         });
+
+        it('the widget should be using the setted language', function () {
+            var element = angular.element('<form name="form">' +
+                    '<input type="text" ng-model="something" />' +
+                    '<div vc-recaptcha key="key" on-create="onCreate()" lang="es" on-success="onSuccess({response: response, widgetId: id})"/>' +
+                    '</form>'),
+
+                _fakeCreate = function (element, config) {
+                    config.callback(config.lang);
+                    return {
+                        then: function (cb) {
+                            cb();
+                        }
+                    };
+                };
+
+            spyOn(vcRecaptchaService, 'create').and.callFake(_fakeCreate);
+
+            $compile(element)($scope);
+            $scope.$digest();
+            $timeout.flush();
+
+            expect($scope.onSuccess).toHaveBeenCalledWith({
+                response: 'es',
+                widgetId: undefined
+            });
+        });
     });
 });

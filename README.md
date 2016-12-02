@@ -131,8 +131,11 @@ You can optionally pass a __theme__ the captcha should use, as an html attribute
         size="---- compact or normal ----"
         type="'---- audio or image ----'"
         key="'---- YOUR PUBLIC KEY GOES HERE ----'"
+        lang="---- language code ----"
     ></div>
 ```
+
+**Language Codes**: https://developers.google.com/recaptcha/docs/language
 
 In this case we are specifying that the captcha should use the theme named _light_.
 
@@ -153,6 +156,7 @@ There are three listeners you can use with the directive, `on-create`, `on-succe
     on-create="setWidgetId(widgetId)"
     on-success="setResponse(response)"
     on-expire="cbExpiration()"
+    lang=""
 ></div>
 ```
 
@@ -205,19 +209,24 @@ myApp.config(function(vcRecaptchaServiceProvider){
   vcRecaptchaServiceProvider.setStoken('--- YOUR GENERATED SECURE TOKEN ---')
   vcRecaptchaServiceProvider.setSize('---- compact or normal ----')
   vcRecaptchaServiceProvider.setType('---- audio or image ----')
+  vcRecaptchaServiceProvider.setLang('---- language code ----')
 });
 ```
+
+**Language Codes**: https://developers.google.com/recaptcha/docs/language
 
 You can also set all of the values at once.
 
 ```javascript
 myApp.config(function(vcRecaptchaServiceProvider){
   vcRecaptchaServiceProvider.setDefaults({
-  key: '---- YOUR PUBLIC KEY GOES HERE ----',
-  theme: '---- light or dark ----',
-  stoken: '--- YOUR GENERATED SECURE TOKEN ---',
-  size: '---- compact or normal ----',
-  type: '---- audio or image ----'
+    key: '---- YOUR PUBLIC KEY GOES HERE ----',
+    theme: '---- light or dark ----',
+    stoken: '--- YOUR GENERATED SECURE TOKEN ---',
+    size: '---- compact or normal ----',
+    type: '---- audio or image ----',
+    lang: '---- language code ----'
+  });
 });
 ```
 Note: any value omitted will be undefined, even if previously set.

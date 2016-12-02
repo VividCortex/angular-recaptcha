@@ -77,6 +77,15 @@
         };
 
         /**
+         * Sets the reCaptcha language which will be used by default is not specified in a specific directive instance.
+         *
+         * @param lang  The reCaptcha language.
+         */
+        provider.setLang = function(lang){
+            config.lang = lang;
+        };
+
+        /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
          *
          * @since 2.5.0
@@ -87,7 +96,7 @@
         };
 
         provider.$get = ['$rootScope','$window', '$q', function ($rootScope, $window, $q) {
-            var deferred = $q.defer(), promise = deferred.promise, recaptcha;
+            var deferred = $q.defer(), promise = deferred.promise, instances = {}, recaptcha;
 
             $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
 
@@ -142,12 +151,15 @@
                     conf.stoken = conf.stoken || config.stoken;
                     conf.size = conf.size || config.size;
                     conf.type = conf.type || config.type;
+                    conf.hl = conf.lang || config.lang;
 
                     if (!conf.sitekey || conf.sitekey.length !== 40) {
                         throwNoKeyException();
                     }
                     return getRecaptcha().then(function (recaptcha) {
-                        return recaptcha.render(elm, conf);
+                        var widgetId = recaptcha.render(elm, conf);
+                        instances[widgetId] = elm;
+                        return widgetId;
                     });
                 },
 
@@ -157,11 +169,43 @@
                 reload: function (widgetId) {
                     validateRecaptchaInstance();
 
-                    // $log.info('Reloading captcha');
                     recaptcha.reset(widgetId);
 
                     // Let everyone know this widget has been reset.
                     $rootScope.$broadcast('reCaptchaReset', widgetId);
+                },
+
+                /**
+                 * Get/Set reCaptcha language
+                 */
+                useLang: function (widgetId, lang) {
+                    var instance = instances[widgetId];
+
+                    if (instance) {
+                        var iframe = instance.querySelector('iframe');
+                        if (lang) {
+                            // Setter
+                            if (iframe && iframe.src) {
+                                var s = iframe.src;
+                                if (/[?&]hl=/.test(s)) {
+                                    s = s.replace(/([?&]hl=)\w+/, '$1' + lang);
+                                } else {
+                                    s += ((s.indexOf('?') === -1) ? '?' : '&') + 'hl=' + lang;
+                                }
+
+                                iframe.src = s;
+                            }
+                        } else {
+                            // Getter
+                            if (iframe && iframe.src && /[?&]hl=\w+/.test(iframe.src)) {
+                                return iframe.src.replace(/.+[?&]hl=(\w+)([^\w].+)?/, '$1');
+                            } else {
+                                return null;
+                            }
+                        }
+                    } else {
+                        throw new Error('reCaptcha Widget ID not exists', widgetId);
+                    }
                 },
 
                 /**
@@ -175,6 +219,20 @@
                     validateRecaptchaInstance();
 
                     return recaptcha.getResponse(widgetId);
+                },
+
+                /**
+                 * Gets reCaptcha instance and configuration
+                 */
+                getInstance: function (widgetId) {
+                    return instances[widgetId];
+                },
+
+                /**
+                 * Destroy reCaptcha instance.
+                 */
+                destroy: function (widgetId) {
+                    delete instances[widgetId];
                 }
             };
 
