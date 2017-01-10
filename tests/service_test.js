@@ -1,26 +1,27 @@
 describe('service', function () {
     'use strict';
 
-    var vcRecaptchaService, $window;
+    var driver;
 
-    beforeEach(module('vcRecaptcha', function ($provide) {
-        $provide.constant('$window', {
-            grecaptcha: jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset'])
+    beforeEach(module('vcRecaptcha'));
+
+    beforeEach(function () {
+        driver = new ServiceDriver();
+    });
+
+    describe('with loaded api', function () {
+        var grecaptchaMock;
+
+        beforeEach(function () {
+            driver
+                .given.apiLoaded(grecaptchaMock = jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset']))
+                .when.created();
         });
-    }));
 
-    beforeEach(inject(function (_vcRecaptchaService_, _$window_) {
-        vcRecaptchaService = _vcRecaptchaService_;
-        $window            = _$window_;
-
-        $window.vcRecaptchaApiLoaded = jasmine.createSpy('vcRecaptchaApiLoaded');
-    }));
-
-    describe('create', function () {
-        it('should call recaptcha.render', inject(function ($rootScope) {
-            var _element    = '<div></div>',
-                _key        = '1234567890123456789012345678901234567890',
-                _fn         = angular.noop,
+        it('should call recaptcha.render', function () {
+            var _element = '<div></div>',
+                _key = '1234567890123456789012345678901234567890',
+                _fn = angular.noop,
                 _confRender = {
                     sitekey: _key,
                     key: _key,
@@ -32,57 +33,89 @@ describe('service', function () {
                     hl: undefined
                 };
 
-            $window.vcRecaptchaApiLoaded();
+            driver.when.notifyThatApiLoaded();
 
-            vcRecaptchaService.create(_element, {
+            driver.service.create(_element, {
                 key: _confRender.key,
                 callback: _fn
             });
 
-            $rootScope.$digest();
+            driver.applyChanges();
 
-            expect($window.grecaptcha.render).toHaveBeenCalledWith(_element, _confRender);
-        }));
-    });
+            expect(grecaptchaMock.render).toHaveBeenCalledWith(_element, _confRender);
+        });
 
-    describe('reload', function () {
         it('should call reset', function () {
             var _widgetId = 123;
 
-            vcRecaptchaService.reload(_widgetId);
+            driver.service.reload(_widgetId);
 
-            expect($window.grecaptcha.reset).toHaveBeenCalledWith(_widgetId);
+            expect(grecaptchaMock.reset).toHaveBeenCalledWith(_widgetId);
         });
-    });
 
-    describe('getResponse', function () {
         it('should call getResponse', function () {
             var _widgetId = 123;
 
-            vcRecaptchaService.getResponse(_widgetId);
+            driver.service.getResponse(_widgetId);
 
-            expect($window.grecaptcha.getResponse).toHaveBeenCalledWith(_widgetId);
+            expect(grecaptchaMock.getResponse).toHaveBeenCalledWith(_widgetId);
+        });
+
+        it('should call useLang', function () {
+            var _element = angular.element('<div><iframe src="http://localhost?hl=fr"></iframe></div>')[0],
+                _key = '1234567890123456789012345678901234567890';
+
+            driver.when.notifyThatApiLoaded();
+
+            driver.service.create(_element, {
+                key: _key
+            }).then(function (widgetId) {
+                var instance = driver.service.getInstance(widgetId);
+                expect(instance).toEqual(_element);
+
+                driver.service.useLang(widgetId, 'es');
+                expect(driver.service.useLang(widgetId)).toEqual('es');
+            });
+
+            driver.applyChanges();
         });
     });
 
-    describe('useLang', function () {
-        it('should call useLang', inject(function ($rootScope) {
-            var _element  = angular.element('<div><iframe src="http://localhost?hl=fr"></iframe></div>')[0],
-                _key      = '1234567890123456789012345678901234567890';
+    describe('without loaded api', function () {
+        var scriptTagSpy,
+            appendChildSpy,
+            funcName;
 
-            $window.vcRecaptchaApiLoaded();
+        beforeEach(function () {
+            scriptTagSpy = jasmine.createSpy('scriptTagSpy');
+            appendChildSpy = jasmine.createSpy('appendChildSpy');
 
-            vcRecaptchaService.create(_element, {
-                key: _key
-            }).then(function (widgetId) {
-                var instance = vcRecaptchaService.getInstance(widgetId);
-                expect(instance).toEqual(_element);
+            driver
+                .given.onLoadFunctionName(funcName = 'my-func')
+                .given.mockDocument({
+                    get: function () {
+                            return {
+                                createElement: function () {
+                                    return scriptTagSpy;
+                                },
+                                body: {
+                                    appendChild: appendChildSpy
+                                }
+                            };
+                        }
+                    })
+                .when.created();
 
-                vcRecaptchaService.useLang(widgetId, 'es');
-                expect(vcRecaptchaService.useLang(widgetId)).toEqual('es');
-            })
+        });
 
-            $rootScope.$digest();
-        }));
+        it('should add script tag to body', function () {
+            expect(scriptTagSpy.async).toBe(true);
+            expect(scriptTagSpy.defer).toBe(true);
+            expect(appendChildSpy).toHaveBeenCalledWith(scriptTagSpy);
+        });
+
+        it('should add callback function name to src', function () {
+            expect(scriptTagSpy.src).toBe('https://www.google.com/recaptcha/api.js?onload=' + funcName + '&render=explicit');
+        });
     });
 });
