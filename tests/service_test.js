@@ -117,5 +117,9 @@ describe('service', function () {
         it('should add callback function name to src', function () {
             expect(scriptTagSpy.src).toBe('https://www.google.com/recaptcha/api.js?onload=' + funcName + '&render=explicit');
         });
+
+        it('should validate that recaptcha is loaded', function () {
+            expect(driver.service.reload).toThrowError('reCaptcha has not been loaded yet.');
+        });
     });
 });
