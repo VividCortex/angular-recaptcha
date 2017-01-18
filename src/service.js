@@ -95,7 +95,7 @@
             provider.onLoadFunctionName = onLoadFunctionName;
         };
 
-        provider.$get = ['$rootScope','$window', '$q', function ($rootScope, $window, $q) {
+        provider.$get = ['$rootScope','$window', '$q', '$document', function ($rootScope, $window, $q, $document) {
             var deferred = $q.defer(), promise = deferred.promise, instances = {}, recaptcha;
 
             $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
@@ -133,6 +133,13 @@
             // Check if grecaptcha is not defined already.
             if (ng.isDefined($window.grecaptcha)) {
                 callback();
+            } else {
+                // Generate link on demand
+                var script = $document.get(0).createElement('script');
+                script.async = true;
+                script.defer = true;
+                script.src = 'https://www.google.com/recaptcha/api.js?onload='+provider.onLoadFunctionName+'&render=explicit';
+                $document.get(0).body.appendChild(script);
             }
 
             return {

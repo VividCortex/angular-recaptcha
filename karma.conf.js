@@ -23,6 +23,7 @@ module.exports = function (config) {
             'src/module.js',
             'src/*.js',
 
+            'tests/*.driver.js',
             'tests/*_test.js'
         ],
 
