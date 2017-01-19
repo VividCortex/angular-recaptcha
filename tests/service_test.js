@@ -93,7 +93,7 @@ describe('service', function () {
             driver
                 .given.onLoadFunctionName(funcName = 'my-func')
                 .given.mockDocument({
-                    get: function () {
+                    find: function () {
                             return {
                                 createElement: function () {
                                     return scriptTagSpy;

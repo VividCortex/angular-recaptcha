@@ -135,11 +135,11 @@
                 callback();
             } else {
                 // Generate link on demand
-                var script = $document[0].createElement('script');
+                var script = ng.element('<script/>');
                 script.async = true;
                 script.defer = true;
                 script.src = 'https://www.google.com/recaptcha/api.js?onload='+provider.onLoadFunctionName+'&render=explicit';
-                $document[0].body.appendChild(script);
+                $document.find('body').appendChild(script);
             }
 
             return {
