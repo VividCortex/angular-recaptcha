@@ -3,6 +3,7 @@ AngularJS reCaptcha
 
 [![Build Status](https://travis-ci.org/VividCortex/angular-recaptcha.svg?branch=master)](https://travis-ci.org/VividCortex/angular-recaptcha)
 [![Coverage Status](https://coveralls.io/repos/VividCortex/angular-recaptcha/badge.svg?branch=master)](https://coveralls.io/r/VividCortex/angular-recaptcha?branch=master)
+![image](https://img.shields.io/npm/dm/angular-recaptcha.svg)
 
 Add a [reCaptcha](https://www.google.com/recaptcha/intro/index.html) to your [AngularJS](angularjs.org) project.
 
