@@ -83,27 +83,29 @@ describe('service', function () {
 
     describe('without loaded api', function () {
         var scriptTagSpy,
-            appendChildSpy,
+            appendSpy,
             funcName;
 
         beforeEach(function () {
             scriptTagSpy = jasmine.createSpy('scriptTagSpy');
-            appendChildSpy = jasmine.createSpy('appendChildSpy');
+            appendSpy = jasmine.createSpy('appendSpy');
 
             driver
                 .given.onLoadFunctionName(funcName = 'my-func')
                 .given.mockDocument({
-                    get: function () {
-                            return {
-                                createElement: function () {
-                                    return scriptTagSpy;
-                                },
-                                body: {
-                                    appendChild: appendChildSpy
-                                }
-                            };
+                    find: function () {
+                        return {
+                            append: appendSpy
+                        };
+                    }
+                })
+                .given.mockWindow({
+                    document: {
+                        createElement: function () {
+                            return scriptTagSpy;
                         }
-                    })
+                    }
+                })
                 .when.created();
 
         });
@@ -111,7 +113,7 @@ describe('service', function () {
         it('should add script tag to body', function () {
             expect(scriptTagSpy.async).toBe(true);
             expect(scriptTagSpy.defer).toBe(true);
-            expect(appendChildSpy).toHaveBeenCalledWith(scriptTagSpy);
+            expect(appendSpy).toHaveBeenCalledWith(scriptTagSpy);
         });
 
         it('should add callback function name to src', function () {
