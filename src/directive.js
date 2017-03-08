@@ -17,6 +17,7 @@
                 size: '=?',
                 type: '=?',
                 lang: '=?',
+				badge: '=?'
                 tabindex: '=?',
                 required: '=?',
                 onCreate: '&',
@@ -52,6 +53,7 @@
                         lang: scope.lang || attrs.lang || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
                         size: scope.size || attrs.size || null,
+						badge: scope.badge || attrs.badge || null,
                         'expired-callback': expired
 
                     }).then(function (widgetId) {

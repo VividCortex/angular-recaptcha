@@ -84,6 +84,14 @@
         provider.setLang = function(lang){
             config.lang = lang;
         };
+        /**
+         * Sets the reCaptcha badge position which will be used by default is not specified in a specific directive instance.
+         *
+         * @param lang  The reCaptcha badge position.
+         */
+        provider.setBadge = function(badge){
+            config.badge = badge;
+        };
 
         /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
@@ -159,6 +167,7 @@
                     conf.size = conf.size || config.size;
                     conf.type = conf.type || config.type;
                     conf.hl = conf.lang || config.lang;
+                    conf.badge = conf.badge || config.badge;
 
                     if (!conf.sitekey || conf.sitekey.length !== 40) {
                         throwNoKeyException();
@@ -181,7 +190,7 @@
                     // Let everyone know this widget has been reset.
                     $rootScope.$broadcast('reCaptchaReset', widgetId);
                 },
-
+                
                 /**
                  * Get/Set reCaptcha language
                  */
