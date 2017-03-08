@@ -190,7 +190,16 @@
                     // Let everyone know this widget has been reset.
                     $rootScope.$broadcast('reCaptchaReset', widgetId);
                 },
-                
+
+                /**
+                 * Executes the reCaptcha
+                 */
+                execute: function (widgetId) {
+                    validateRecaptchaInstance();
+
+                    recaptcha.execute(widgetId);
+                },
+
                 /**
                  * Get/Set reCaptcha language
                  */
