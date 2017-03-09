@@ -54,6 +54,14 @@ describe('service', function () {
             expect(grecaptchaMock.reset).toHaveBeenCalledWith(_widgetId);
         });
 
+        it('should call execute', function () {
+            var _widgetId = 123;
+
+            driver.service.execute(_widgetId);
+
+            expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId);
+        });
+
         it('should call getResponse', function () {
             var _widgetId = 123;
 

@@ -91,4 +91,16 @@ describe('provider', function () {
 
         expect(callArgs).toEqual(jasmine.objectContaining({hl: lang}));
     });
+
+    it('should setBadge', function () {
+        var badge = 'bottomright';
+        driver.provider.setBadge(badge);
+
+        driver.when.callingCreate();
+
+        var callArgs = recaptchaMock.render.calls.mostRecent().args[1];
+
+        expect(callArgs).toEqual(jasmine.objectContaining({badge: badge}));
+    });    
+    
 });
