@@ -14,7 +14,7 @@ describe('service', function () {
 
         beforeEach(function () {
             driver
-                .given.apiLoaded(grecaptchaMock = jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset']))
+                .given.apiLoaded(grecaptchaMock = jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset','execute']))
                 .when.created();
         });
 
