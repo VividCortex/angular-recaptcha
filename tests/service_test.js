@@ -30,7 +30,8 @@ describe('service', function () {
                     stoken: undefined,
                     size: undefined,
                     type: undefined,
-                    hl: undefined
+                    hl: undefined,
+                    badge: undefined
                 };
 
             driver.when.notifyThatApiLoaded();
