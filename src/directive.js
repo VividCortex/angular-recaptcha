@@ -17,7 +17,7 @@
                 size: '=?',
                 type: '=?',
                 lang: '=?',
-				badge: '=?'
+				badge: '=?',
                 tabindex: '=?',
                 required: '=?',
                 onCreate: '&',
