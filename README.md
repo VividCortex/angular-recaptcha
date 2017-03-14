@@ -3,6 +3,7 @@ AngularJS reCaptcha
 
 [![Build Status](https://travis-ci.org/VividCortex/angular-recaptcha.svg?branch=master)](https://travis-ci.org/VividCortex/angular-recaptcha)
 [![Coverage Status](https://coveralls.io/repos/VividCortex/angular-recaptcha/badge.svg?branch=master)](https://coveralls.io/r/VividCortex/angular-recaptcha?branch=master)
+![image](https://img.shields.io/npm/dm/angular-recaptcha.svg)
 
 Add a [reCaptcha](https://www.google.com/recaptcha/intro/index.html) to your [AngularJS](angularjs.org) project.
 
@@ -41,20 +42,7 @@ See [the demo file](demo/usage.html) for a quick usage example.
 
 - First, you need to get a valid recaptcha key for your domain. Go to http://www.google.com/recaptcha.
 
-- Include the reCaptcha [API](https://developers.google.com/recaptcha/docs/display#AJAX) using this script in your HTML:
-
-```html
-<script
-  src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"
-  async defer
-></script>
-```
-
-As you can see, we are specifying a `onload` callback, which will notify the angular service once the api is ready for usage.
-
-The `onload` callback name defaults to `vcRecaptchaApiLoaded`, but can be overridden by the service provider via `vcRecaptchaServiceProvider.setOnLoadFunctionName('myOtherFunctionName');`.
-
-- Also include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
+- Include the vc-recaptcha script and make your angular app depend on the `vcRecaptcha` module.
 
 ```html
 <script type="text/javascript" src="angular-recaptcha.js"></script>
@@ -131,8 +119,11 @@ You can optionally pass a __theme__ the captcha should use, as an html attribute
         size="---- compact or normal ----"
         type="'---- audio or image ----'"
         key="'---- YOUR PUBLIC KEY GOES HERE ----'"
+        lang="---- language code ----"
     ></div>
 ```
+
+**Language Codes**: https://developers.google.com/recaptcha/docs/language
 
 In this case we are specifying that the captcha should use the theme named _light_.
 
@@ -153,6 +144,7 @@ There are three listeners you can use with the directive, `on-create`, `on-succe
     on-create="setWidgetId(widgetId)"
     on-success="setResponse(response)"
     on-expire="cbExpiration()"
+    lang=""
 ></div>
 ```
 
@@ -205,19 +197,24 @@ myApp.config(function(vcRecaptchaServiceProvider){
   vcRecaptchaServiceProvider.setStoken('--- YOUR GENERATED SECURE TOKEN ---')
   vcRecaptchaServiceProvider.setSize('---- compact or normal ----')
   vcRecaptchaServiceProvider.setType('---- audio or image ----')
+  vcRecaptchaServiceProvider.setLang('---- language code ----')
 });
 ```
+
+**Language Codes**: https://developers.google.com/recaptcha/docs/language
 
 You can also set all of the values at once.
 
 ```javascript
 myApp.config(function(vcRecaptchaServiceProvider){
   vcRecaptchaServiceProvider.setDefaults({
-  key: '---- YOUR PUBLIC KEY GOES HERE ----',
-  theme: '---- light or dark ----',
-  stoken: '--- YOUR GENERATED SECURE TOKEN ---',
-  size: '---- compact or normal ----',
-  type: '---- audio or image ----'
+    key: '---- YOUR PUBLIC KEY GOES HERE ----',
+    theme: '---- light or dark ----',
+    stoken: '--- YOUR GENERATED SECURE TOKEN ---',
+    size: '---- compact or normal ----',
+    type: '---- audio or image ----',
+    lang: '---- language code ----'
+  });
 });
 ```
 Note: any value omitted will be undefined, even if previously set.
@@ -236,6 +233,7 @@ Differences with the old reCaptcha
 Recent Changelog
 ----------------
 
+- 3.0.0 - Removed the need to include the Google recaptcha api.
 - 2.2.3 - Removed _cleanup_ after creating the captcha element.
 - 2.0.1 - Fixed onload when using ng-route and recaptcha is placed in a secondary view.
 - 2.0.0 - Rewritten service to support new reCaptcha

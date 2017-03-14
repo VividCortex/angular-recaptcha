@@ -16,6 +16,7 @@
                 theme: '=?',
                 size: '=?',
                 type: '=?',
+                lang: '=?',
                 tabindex: '=?',
                 required: '=?',
                 onCreate: '&',
@@ -48,6 +49,7 @@
                         stoken: scope.stoken || attrs.stoken || null,
                         theme: scope.theme || attrs.theme || null,
                         type: scope.type || attrs.type || null,
+                        lang: scope.lang || attrs.lang || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
                         size: scope.size || attrs.size || null,
                         'expired-callback': expired
@@ -100,6 +102,8 @@
                 }
 
                 function cleanup(){
+                  vcRecaptcha.destroy(scope.widgetId);
+
                   // removes elements reCaptcha added.
                   ng.element($document[0].querySelectorAll('.pls-container')).parent().remove();
                 }

@@ -15,7 +15,6 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'bower_components/jquery/dist/jquery.min.js',
             'bower_components/angular/angular.js',
 
             'bower_components/angular-mocks/angular-mocks.js',
@@ -23,6 +22,7 @@ module.exports = function (config) {
             'src/module.js',
             'src/*.js',
 
+            'tests/*.driver.js',
             'tests/*_test.js'
         ],
 
@@ -70,6 +70,12 @@ module.exports = function (config) {
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: ['PhantomJS', 'Chrome', 'IE', 'Safari', 'Firefox', 'FirefoxNightly', 'ChromeCanary'],
 
+        customLaunchers: {
+            Chrome_travis_ci: {
+                base: 'Chrome',
+                flags: ['--no-sandbox']
+            }
+        },
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
