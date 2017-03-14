@@ -12,7 +12,7 @@
       "url" : "https://github.com/reduardo7/angular-recaptcha"
     }
   ],
-  "main": "release/angular-recaptcha.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/vividcortex/angular-recaptcha.git"
