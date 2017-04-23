@@ -84,10 +84,11 @@
         provider.setLang = function(lang){
             config.lang = lang;
         };
+
         /**
-         * Sets the reCaptcha badge position which will be used by default is not specified in a specific directive instance.
+         * Sets the reCaptcha badge position which will be used by default if not specified in a specific directive instance.
          *
-         * @param lang  The reCaptcha badge position.
+         * @param badge  The reCaptcha badge position.
          */
         provider.setBadge = function(badge){
             config.badge = badge;
