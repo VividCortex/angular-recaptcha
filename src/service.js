@@ -86,6 +86,15 @@
         };
 
         /**
+         * Sets the reCaptcha badge position which will be used by default if not specified in a specific directive instance.
+         *
+         * @param badge  The reCaptcha badge position.
+         */
+        provider.setBadge = function(badge){
+            config.badge = badge;
+        };
+
+        /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
          *
          * @since 2.5.0
@@ -159,6 +168,7 @@
                     conf.size = conf.size || config.size;
                     conf.type = conf.type || config.type;
                     conf.hl = conf.lang || config.lang;
+                    conf.badge = conf.badge || config.badge;
 
                     if (!conf.sitekey || conf.sitekey.length !== 40) {
                         throwNoKeyException();
@@ -180,6 +190,15 @@
 
                     // Let everyone know this widget has been reset.
                     $rootScope.$broadcast('reCaptchaReset', widgetId);
+                },
+
+                /**
+                 * Executes the reCaptcha
+                 */
+                execute: function (widgetId) {
+                    validateRecaptchaInstance();
+
+                    recaptcha.execute(widgetId);
                 },
 
                 /**

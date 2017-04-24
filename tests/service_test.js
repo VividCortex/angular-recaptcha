@@ -14,7 +14,7 @@ describe('service', function () {
 
         beforeEach(function () {
             driver
-                .given.apiLoaded(grecaptchaMock = jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset']))
+                .given.apiLoaded(grecaptchaMock = jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset','execute']))
                 .when.created();
         });
 
@@ -30,7 +30,8 @@ describe('service', function () {
                     stoken: undefined,
                     size: undefined,
                     type: undefined,
-                    hl: undefined
+                    hl: undefined,
+                    badge: undefined
                 };
 
             driver.when.notifyThatApiLoaded();
@@ -51,6 +52,14 @@ describe('service', function () {
             driver.service.reload(_widgetId);
 
             expect(grecaptchaMock.reset).toHaveBeenCalledWith(_widgetId);
+        });
+
+        it('should call execute', function () {
+            var _widgetId = 123;
+
+            driver.service.execute(_widgetId);
+
+            expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId);
         });
 
         it('should call getResponse', function () {
