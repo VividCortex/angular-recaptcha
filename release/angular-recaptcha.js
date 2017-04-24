@@ -1,5 +1,5 @@
 /**
- * @license angular-recaptcha build:2017-03-14
+ * @license angular-recaptcha build:2017-04-24
  * https://github.com/vividcortex/angular-recaptcha
  * Copyright (c) 2017 VividCortex
 **/
@@ -100,6 +100,15 @@
         };
 
         /**
+         * Sets the reCaptcha badge position which will be used by default if not specified in a specific directive instance.
+         *
+         * @param badge  The reCaptcha badge position.
+         */
+        provider.setBadge = function(badge){
+            config.badge = badge;
+        };
+
+        /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
          *
          * @since 2.5.0
@@ -173,6 +182,7 @@
                     conf.size = conf.size || config.size;
                     conf.type = conf.type || config.type;
                     conf.hl = conf.lang || config.lang;
+                    conf.badge = conf.badge || config.badge;
 
                     if (!conf.sitekey || conf.sitekey.length !== 40) {
                         throwNoKeyException();
@@ -194,6 +204,15 @@
 
                     // Let everyone know this widget has been reset.
                     $rootScope.$broadcast('reCaptchaReset', widgetId);
+                },
+
+                /**
+                 * Executes the reCaptcha
+                 */
+                execute: function (widgetId) {
+                    validateRecaptchaInstance();
+
+                    recaptcha.execute(widgetId);
                 },
 
                 /**
@@ -281,6 +300,7 @@
                 size: '=?',
                 type: '=?',
                 lang: '=?',
+                badge: '=?',
                 tabindex: '=?',
                 required: '=?',
                 onCreate: '&',
@@ -316,6 +336,7 @@
                         lang: scope.lang || attrs.lang || null,
                         tabindex: scope.tabindex || attrs.tabindex || null,
                         size: scope.size || attrs.size || null,
+                        badge: scope.badge || attrs.badge || null,
                         'expired-callback': expired
 
                     }).then(function (widgetId) {
