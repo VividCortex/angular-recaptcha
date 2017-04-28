@@ -25,9 +25,7 @@
                 };
 
                 $scope.setResponse = function (response) {
-                    console.info('Response available');
-
-                    $scope.response = response;
+                    console.info('Response available: %s', response);
                 };
 
                 $scope.setWidgetId = function (widgetId) {
@@ -40,8 +38,6 @@
                     console.info('Captcha expired. Resetting response object');
 
                     vcRecaptchaService.reload($scope.widgetId);
-
-                    $scope.response = null;
                  };
 
                 $scope.submit = function () {
@@ -84,6 +80,8 @@
         <form ng-submit="submit()">
             <div
                 vc-recaptcha
+                ng-model="response"
+                required
                 theme="'light'"
                 key="model.key"
                 on-create="setWidgetId(widgetId)"

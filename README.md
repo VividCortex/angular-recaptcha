@@ -57,6 +57,8 @@ var app = angular.module('myApp', ['vcRecaptcha']);
 ```html
 <div
     vc-recaptcha
+    ng-model="gRecaptchaResponse"
+    required
     key="'---- YOUR PUBLIC KEY GOES HERE ----'"
 ></div>
 ```
@@ -66,12 +68,9 @@ Here, the `key` attribute is passed to the directive's scope, so you can use eit
 Form Validation
 ---------------
 
-**By default**, if placed in a [form](https://docs.angularjs.org/api/ng/directive/form) using [formControl](https://docs.angularjs.org/api/ng/type/form.FormController) the captcha will need to be checked for the form to be valid.
-If the captcha is not checked (if the user has not checked the box or the check has expired) the form will be marked as invalid. The validation key is `recaptcha`.
-You can **opt out** of this feature by setting the `required` attribute to `false` or a scoped variable
-that will evaluate to `false`. Any other value, or omitting the attribute will opt in to this feature.
+**By default**, the control is not required and thus, not validated, so if you want it to be required, you need to use the `required` directive provided by AngularJS. It follows the same semantics as any other traditional form input.
 
-You can also trigger the validation programatically if the captcha is not required, for example:
+You can also trigger the validation programmatically if the captcha is not required, for example:
 
 ```js
 vcRecaptchaService.execute(widgetId);
@@ -84,7 +83,7 @@ Response Validation
 
 To validate this object from your server, you need to use the API described in the [verify section](https://developers.google.com/recaptcha/docs/verify). Validation is outside of the scope of this tool, since is mandatory to do that at the server side.
 
-You can simple supply a value for `ng-model` which will be dynamically populated and cleared as the _response_ becomes available and expires, respectively. When you want the value of the response, you can grab it from the scoped variable that was passed to `ng-model`. It works just like adding `ng-model` to any other input in your form.
+The control model value will be dynamically populated and cleared as the _response_ becomes available and expires, respectively. When you want the value of the response, you can grab it from the scoped variable that was passed to `ng-model`. It works just like adding `ng-model` to any other input in your form.
 
 ```html
 ...
@@ -242,6 +241,7 @@ Differences with the old reCaptcha
 Recent Changelog
 ----------------
 
+- 4.0.0 - Remove the custom required validation logic.
 - 3.0.0 - Removed the need to include the Google recaptcha api.
 - 2.2.3 - Removed _cleanup_ after creating the captcha element.
 - 2.0.1 - Fixed onload when using ng-route and recaptcha is placed in a secondary view.
