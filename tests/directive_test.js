@@ -33,19 +33,19 @@ describe('directive: vcRecaptcha', function () {
         });
 
         it('should throw an error - no key', function () {
-            elementHtml     = '<div vc-recaptcha></div>';
+            elementHtml     = '<div vc-recaptcha ng-model="gRecaptchaResponse"></div>';
             expectedMessage = 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
         });
 
         it('should throw an error - key length is not 40 caracters long', function () {
-            elementHtml     = '<div vc-recaptcha key="key"></div>';
+            elementHtml     = '<div vc-recaptcha ng-model="gRecaptchaResponse" key="key"></div>';
             expectedMessage = 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
 
             $scope.key = 'abc';
         });
 
         it('should throw an error - key length is not 40 caracters long - key changed', function () {
-            elementHtml     = '<div vc-recaptcha key="key"></div>';
+            elementHtml     = '<div vc-recaptcha ng-model="gRecaptchaResponse" key="key"></div>';
             expectedMessage = 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
 
             $scope.key = 'abc1';
@@ -54,7 +54,7 @@ describe('directive: vcRecaptcha', function () {
 
     describe('widgetId', function () {
         it('should be null at start', function () {
-            var element = angular.element('<div vc-recaptcha key="key"></div>');
+            var element = angular.element('<div vc-recaptcha ng-model="gRecaptchaResponse" key="key"></div>');
 
             $scope.key = VALID_KEY;
 
@@ -78,11 +78,11 @@ describe('directive: vcRecaptcha', function () {
             expect(vcRecaptchaService.create).toHaveBeenCalled();
         });
 
-        it('should change the validation to false, widget just created', function () {
+        it('should change the validation to false if required, widget just created', function () {
             var element     = angular.element(
                     '<form name="form">' +
                     '<input type="text" ng-model="something" />' +
-                    '<div vc-recaptcha key="key" on-create="onCreate({widgetId: widgetId})" />' +
+                    '<div vc-recaptcha name="recaptcha" ng-model="gRecaptchaResponse" key="key" on-create="onCreate({widgetId: widgetId})" required />' +
                     '</form>'
                 ),
 
@@ -101,14 +101,43 @@ describe('directive: vcRecaptcha', function () {
             $compile(element)($scope);
             $scope.$digest();
 
+            expect($scope.form.recaptcha.$error.required).toBeTruthy();
             expect($scope.form.$valid).toBeFalsy(); // widgetCreated
+            expect($scope.onCreate).toHaveBeenCalledWith({widgetId: 'a'});
+        });
+
+        it('should not change the validation to false, widget just created', function () {
+            var element     = angular.element(
+                    '<form name="form">' +
+                    '<input type="text" ng-model="something" />' +
+                    '<div vc-recaptcha name="recaptcha" ng-model="gRecaptchaResponse" key="key" on-create="onCreate({widgetId: widgetId})" />' +
+                    '</form>'
+                ),
+
+                _fakeCreate = function () {
+                    return {
+                        then: function (cb) {
+                            var _widgetId = 'a';
+
+                            cb(_widgetId);
+                        }
+                    };
+                };
+
+            spyOn(vcRecaptchaService, 'create').and.callFake(_fakeCreate);
+
+            $compile(element)($scope);
+            $scope.$digest();
+
+            expect($scope.form.recaptcha.$error.required).toBeFalsy();
+            expect($scope.form.$valid).toBeTruthy(); // widgetCreated
             expect($scope.onCreate).toHaveBeenCalledWith({widgetId: 'a'});
         });
 
         it('should change the validation to true - first timeout flushed', function () {
             var element     = angular.element('<form name="form">' +
                     '<input type="text" ng-model="something" />' +
-                    '<div vc-recaptcha key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
+                    '<div vc-recaptcha ng-model="gRecaptchaResponse" key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
                     '</form>'),
 
                 _fakeCreate = function (element, config) {
@@ -131,10 +160,10 @@ describe('directive: vcRecaptcha', function () {
             expect($scope.form.$valid).toBeTruthy();
         });
 
-        it('should change the validation to false - session expired', function () {
+        it('should change the validation to false if required - session expired', function () {
             var element     = angular.element('<form name="form">' +
                     '<input type="text" ng-model="something" />' +
-                    '<div vc-recaptcha key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
+                    '<div vc-recaptcha name="recaptcha" ng-model="gRecaptchaResponse" key="k" on-create="onCreate()" on-success="onSuccess()" required />' +
                     '</form>'),
 
                 _fakeCreate = function (element, config) {
@@ -150,19 +179,47 @@ describe('directive: vcRecaptcha', function () {
 
             spyOn(vcRecaptchaService, 'create').and.callFake(_fakeCreate);
 
+            $compile(element)($scope);
+            $scope.$digest();
+
+            $timeout.flush(TIMEOUT_SESSION_CAPTCHA + 1);
+
+            expect($scope.form.recaptcha.$error.required).toBeTruthy();
+            expect($scope.form.$valid).toBeFalsy(); // widgetCreated
+        });
+
+        it('should not change the validation to false - session expired', function () {
+            var element     = angular.element('<form name="form">' +
+                    '<input type="text" ng-model="something" />' +
+                    '<div vc-recaptcha name="recaptcha" ng-model="gRecaptchaResponse" key="k" on-create="onCreate()" on-success="onSuccess()"/>' +
+                    '</form>'),
+
+                _fakeCreate = function (element, config) {
+                    // Call the expiration callback as recaptcha would do.
+                    config['expired-callback']();
+
+                    return {
+                        then: function (cb) {
+                            cb();
+                        }
+                    };
+                };
+
+            spyOn(vcRecaptchaService, 'create').and.callFake(_fakeCreate);
 
             $compile(element)($scope);
             $scope.$digest();
 
             $timeout.flush(TIMEOUT_SESSION_CAPTCHA + 1);
 
-            expect($scope.form.$valid).toBeFalsy(); // widgetCreated
+            expect($scope.form.recaptcha.$error.required).toBeFalsy();
+            expect($scope.form.$valid).toBeTruthy(); // widgetCreated
         });
 
         it('should call the onSuccess callback with the right params', function () {
             var element     = angular.element('<form name="form">' +
                     '<input type="text" ng-model="something" />' +
-                    '<div vc-recaptcha key="key" on-create="onCreate()" on-success="onSuccess({response: response, widgetId: id})"/>' +
+                    '<div vc-recaptcha ng-model="gRecaptchaResponse" key="key" on-create="onCreate()" on-success="onSuccess({response: response, widgetId: id})"/>' +
                     '</form>'),
 
                 _fakeCreate = function (element, config) {
@@ -190,7 +247,7 @@ describe('directive: vcRecaptcha', function () {
         it('the widget should be using the setted language', function () {
             var element = angular.element('<form name="form">' +
                     '<input type="text" ng-model="something" />' +
-                    '<div vc-recaptcha key="key" on-create="onCreate()" lang="es" on-success="onSuccess({response: response, widgetId: id})"/>' +
+                    '<div vc-recaptcha ng-model="gRecaptchaResponse" key="key" on-create="onCreate()" lang="es" on-success="onSuccess({response: response, widgetId: id})"/>' +
                     '</form>'),
 
                 _fakeCreate = function (element, config) {
