@@ -124,7 +124,7 @@ You can optionally pass a __theme__ the captcha should use, as an html attribute
         vc-recaptcha
         ng-model="gRecaptchaResponse"
         theme="---- light or dark ----"
-        size="---- compact or normal ----"
+        size="---- compact, normal or invisible ----"
         type="'---- audio or image ----'"
         key="'---- YOUR PUBLIC KEY GOES HERE ----'"
         lang="---- language code ----"
@@ -203,7 +203,7 @@ myApp.config(function(vcRecaptchaServiceProvider){
   vcRecaptchaServiceProvider.setSiteKey('---- YOUR PUBLIC KEY GOES HERE ----')
   vcRecaptchaServiceProvider.setTheme('---- light or dark ----')
   vcRecaptchaServiceProvider.setStoken('--- YOUR GENERATED SECURE TOKEN ---')
-  vcRecaptchaServiceProvider.setSize('---- compact or normal ----')
+  vcRecaptchaServiceProvider.setSize('---- compact, normal or invisible ----')
   vcRecaptchaServiceProvider.setType('---- audio or image ----')
   vcRecaptchaServiceProvider.setLang('---- language code ----')
 });
@@ -219,7 +219,7 @@ myApp.config(function(vcRecaptchaServiceProvider){
     key: '---- YOUR PUBLIC KEY GOES HERE ----',
     theme: '---- light or dark ----',
     stoken: '--- YOUR GENERATED SECURE TOKEN ---',
-    size: '---- compact or normal ----',
+    size: '---- compact, normal or invisible ----',
     type: '---- audio or image ----',
     lang: '---- language code ----'
   });
