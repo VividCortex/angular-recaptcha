@@ -65,6 +65,7 @@ Here, the `key` attribute is passed to the directive's scope, so you can use eit
 
 Form Validation
 ---------------
+
 **By default**, if placed in a [form](https://docs.angularjs.org/api/ng/directive/form) using [formControl](https://docs.angularjs.org/api/ng/type/form.FormController) the captcha will need to be checked for the form to be valid.
 If the captcha is not checked (if the user has not checked the box or the check has expired) the form will be marked as invalid. The validation key is `recaptcha`.
 You can **opt out** of this feature by setting the `required` attribute to `false` or a scoped variable
@@ -83,7 +84,7 @@ Response Validation
 
 To validate this object from your server, you need to use the API described in the [verify section](https://developers.google.com/recaptcha/docs/verify). Validation is outside of the scope of this tool, since is mandatory to do that at the server side.
 
-You can simple supply a value for `ng-model` which will be dynamically populated and cleared as the _response_ becomes available and expires, respectfully. When you want the value of the response, you can grab it from the scoped variable that was passed to `ng-model`. It works just like adding `ng-model` to any other input in your form.
+You can simple supply a value for `ng-model` which will be dynamically populated and cleared as the _response_ becomes available and expires, respectively. When you want the value of the response, you can grab it from the scoped variable that was passed to `ng-model`. It works just like adding `ng-model` to any other input in your form.
 
 ```html
 ...
@@ -106,7 +107,7 @@ You can simple supply a value for `ng-model` which will be dynamically populated
   ...
 ```
 
-Or you can programmatically get the _response_ that you need to send to your server, use the method `getResponse()` from the `vcRecaptchaService` angular service. This method receives an optional argument _widgetId_, useful for getting the response of a specific reCaptcha widget (in case you render more than one widget). If no widget ID is provided, the response for the first created widget will be returned.
+Or you can programmatically get the _response_ that you need to send to your server, use the method `getResponse()` from the `vcRecaptchaService` angular service. This method receives an optional argument `widgetId`, useful for getting the response of a specific reCaptcha widget (in case you render more than one widget). If no widget ID is provided, the response for the first created widget will be returned.
 
 ```js
 var response = vcRecaptchaService.getResponse(widgetId); // returns the string response
@@ -117,7 +118,7 @@ Using `ng-model` is recommended for normal use as the value is tied directly to 
 Other Parameters
 ----------------
 
-You can optionally pass a __theme__ the captcha should use, as an html attribute:
+You can optionally pass a `theme` the captcha should use, as an HTML attribute:
 
 ```html
     <div
@@ -179,7 +180,7 @@ app.controller('myController', ['$scope', 'vcRecaptchaService', function ($scope
 Secure Token
 ------------
 
-If you want to use a secure token pass it along with the site key as an html attribute.
+If you want to use a secure token pass it along with the site key as an HTML attribute.
 
 ```html
 <div
@@ -194,8 +195,8 @@ To learn more about secure tokens and how to generate & encrypt them please refe
 
 Service Provider
 ----------------
-You can use the vcRecaptchaServiceProvider to configure the recaptcha service once in your application's config function.
-This is a convenient way to set your reCaptcha site key, theme, stoken, size, and type in one place instead of each vc-recaptcha directive element instance.
+You can use the `vcRecaptchaServiceProvider` to configure the recaptcha service once in your application's config function.
+This is a convenient way to set your reCaptcha site key, theme, stoken, size, and type in one place instead of each `vc-recaptcha` directive element instance.
 The defaults defined in the service provider will be overrode by any values passed to the vc-recaptcha directive element for that instance.
 
 ```javascript
