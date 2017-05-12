@@ -70,6 +70,14 @@ If the captcha is not checked (if the user has not checked the box or the check 
 You can **opt out** of this feature by setting the `required` attribute to `false` or a scoped variable
 that will evaluate to `false`. Any other value, or omitting the attribute will opt in to this feature.
 
+You can also trigger the validation programatically if the captcha is not required, for example:
+
+```js
+vcRecaptchaService.execute(widgetId);
+```
+
+If no widget ID is provided, the first created widget will be executed.
+
 Response Validation
 -------------------
 
