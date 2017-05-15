@@ -27,7 +27,7 @@
             link: function (scope, elm, attrs, ctrl) {
                 scope.widgetId = null;
 
-                if(ctrl && ng.isDefined(attrs.required)){
+                if(ctrl){
                     scope.$watch('required', validate);
                 }
 
@@ -99,7 +99,7 @@
 
                 function validate(){
                     if(ctrl){
-                        ctrl.$setValidity('recaptcha', scope.required === false ? null : Boolean(scope.response));
+                        ctrl.$setValidity('recaptcha', !scope.required ? null : Boolean(scope.response));
                     }
                 }
 
