@@ -1,5 +1,5 @@
 /**
- * @license angular-recaptcha build:2017-04-24
+ * @license angular-recaptcha build:2017-05-02
  * https://github.com/vividcortex/angular-recaptcha
  * Copyright (c) 2017 VividCortex
 **/
@@ -281,7 +281,7 @@
 
 }(angular));
 
-/*global angular, Recaptcha */
+/*global angular */
 (function (ng) {
     'use strict';
 
@@ -290,10 +290,8 @@
     app.directive('vcRecaptcha', ['$document', '$timeout', 'vcRecaptchaService', function ($document, $timeout, vcRecaptcha) {
 
         return {
-            restrict: 'A',
-            require: "?^^form",
+            require: "ngModel",
             scope: {
-                response: '=?ngModel',
                 key: '=?',
                 stoken: '=?',
                 theme: '=?',
@@ -302,7 +300,6 @@
                 lang: '=?',
                 badge: '=?',
                 tabindex: '=?',
-                required: '=?',
                 onCreate: '&',
                 onSuccess: '&',
                 onExpire: '&'
@@ -310,16 +307,11 @@
             link: function (scope, elm, attrs, ctrl) {
                 scope.widgetId = null;
 
-                if(ctrl && ng.isDefined(attrs.required)){
-                    scope.$watch('required', validate);
-                }
-
                 var removeCreationListener = scope.$watch('key', function (key) {
                     var callback = function (gRecaptchaResponse) {
                         // Safe $apply
                         $timeout(function () {
-                            scope.response = gRecaptchaResponse;
-                            validate();
+                            ctrl.$setViewValue(gRecaptchaResponse);
 
                             // Notify about the response availability
                             scope.onSuccess({response: gRecaptchaResponse, widgetId: scope.widgetId});
@@ -341,16 +333,14 @@
 
                     }).then(function (widgetId) {
                         // The widget has been created
-                        validate();
                         scope.widgetId = widgetId;
                         scope.onCreate({widgetId: widgetId});
 
-                        scope.$on('$destroy', destroy);
+                        scope.$on('$destroy', cleanup);
 
                         scope.$on('reCaptchaReset', function(event, resetWidgetId){
                           if(ng.isUndefined(resetWidgetId) || widgetId === resetWidgetId){
-                            scope.response = "";
-                            validate();
+                            ctrl.$setViewValue("");
                           }
                         })
 
@@ -360,30 +350,14 @@
                     removeCreationListener();
                 });
 
-                function destroy() {
-                  if (ctrl) {
-                    // reset the validity of the form if we were removed
-                    ctrl.$setValidity('recaptcha', null);
-                  }
-
-                  cleanup();
-                }
-
                 function expired(){
                     // Safe $apply
                     $timeout(function () {
-                        scope.response = "";
-                        validate();
+                        ctrl.$setViewValue("");
 
                         // Notify about the response availability
                         scope.onExpire({ widgetId: scope.widgetId });
                     });
-                }
-
-                function validate(){
-                    if(ctrl){
-                        ctrl.$setValidity('recaptcha', scope.required === false ? null : Boolean(scope.response));
-                    }
                 }
 
                 function cleanup(){
