@@ -47,12 +47,12 @@ module.exports = function (grunt) {
         karma: {
             unit: {
                 configFile: 'karma.conf.js',
-                browsers: ['Chrome'],
+                browsers: ['ChromeHeadless'],
                 singleRun: true
             },
             ci: {
                 configFile: 'karma.conf.js',
-                browsers: ['Chrome_travis_ci', 'Firefox', 'FirefoxNightly'],
+                browsers: ['ChromeHeadless', 'Firefox', 'FirefoxNightly'],
                 singleRun: true
             }
         },
