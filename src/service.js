@@ -148,7 +148,7 @@
                 script.async = true;
                 script.defer = true;
                 script.src = 'https://www.google.com/recaptcha/api.js?onload='+provider.onLoadFunctionName+'&render=explicit';
-                $document.find('body').append(script);
+                $document.find('body')[0].appendChild(script);
             }
 
             return {

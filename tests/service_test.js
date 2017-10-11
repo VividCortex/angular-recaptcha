@@ -103,9 +103,9 @@ describe('service', function () {
                 .given.onLoadFunctionName(funcName = 'my-func')
                 .given.mockDocument({
                     find: function () {
-                        return {
-                            append: appendSpy
-                        };
+                        return [{
+                            appendChild: appendSpy
+                        }];
                     }
                 })
                 .given.mockWindow({
