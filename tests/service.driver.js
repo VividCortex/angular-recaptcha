@@ -20,12 +20,8 @@ function ServiceDriver() {
             return _this;
         },
         mockDocument: function (mockDocument) {
-            mockModules.$document.find = mockDocument.find;
-
-            return _this;
-        },
-        mockWindow: function (mockWindow) {
-            mockModules.$window.document = mockWindow.document;
+            mockModules.$document = mockDocument;
+            mockModules.$window.document = mockDocument[0];
 
             return _this;
         }

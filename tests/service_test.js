@@ -100,20 +100,21 @@ describe('service', function () {
             createElement = jasmine.createSpy('createElement');
             appendSpy = jasmine.createSpy('appendSpy');
 
+            var doc = [{
+                createElement: createElement,
+                querySelector: function() {
+                    return {};
+                }
+            }];
+            doc.find = function () {
+                return [{
+                    appendChild: appendSpy
+                }];
+            };
+
             driver
                 .given.onLoadFunctionName(funcName = 'my-func')
-                .given.mockDocument({
-                    find: function () {
-                        return [{
-                            appendChild: appendSpy
-                        }]
-                    }
-                })
-                .given.mockWindow({
-                    document: {
-                        createElement: createElement
-                    }
-                })
+                .given.mockDocument(doc)
                 .when.created();
         });
 
@@ -148,27 +149,24 @@ describe('service', function () {
             scriptTagSpy = jasmine.createSpy('scriptTagSpy');
             appendSpy = jasmine.createSpy('appendSpy');
 
+            var doc = [{
+                createElement: function () {
+                    return scriptTagSpy;
+                },
+                querySelector: function() {
+                    return null;
+                }
+            }];
+            doc.find = function () {
+                return [{
+                    appendChild: appendSpy
+                }];
+            };
+
             driver
                 .given.onLoadFunctionName(funcName = 'my-func')
-                .given.mockDocument({
-                    find: function (selector) {
-                        if (selector === 'body') {
-                            return [{
-                                appendChild: appendSpy
-                            }];
-                        }
-                        return [];
-                    }
-                })
-                .given.mockWindow({
-                    document: {
-                        createElement: function () {
-                            return scriptTagSpy;
-                        }
-                    }
-                })
+                .given.mockDocument(doc)
                 .when.created();
-
         });
 
         it('should add script tag to body', function () {

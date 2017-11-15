@@ -142,8 +142,7 @@
             // Check if grecaptcha is not defined already.
             if (ng.isDefined($window.grecaptcha)) {
                 callback();
-            } else if ($document.find('script[src^="https://www.google.com/recaptcha/api.js"]').length) {
-                console.log('waiting for captcha');
+            } else if ($document[0].querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
                 // wait for script to be loaded.
                 var intervalWait = $interval(function() {
                     if (ng.isDefined($window.grecaptcha)) {
