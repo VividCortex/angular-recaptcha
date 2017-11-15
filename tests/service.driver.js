@@ -33,8 +33,9 @@ function ServiceDriver() {
 
     this.when = {
         created: function () {
-            inject(function (vcRecaptchaService) {
+            inject(function (vcRecaptchaService, _$interval_) {
                 _this.service = vcRecaptchaService;
+                _this.$interval = _$interval_;
             })
         },
         notifyThatApiLoaded: function () {

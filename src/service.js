@@ -104,7 +104,7 @@
             provider.onLoadFunctionName = onLoadFunctionName;
         };
 
-        provider.$get = ['$rootScope','$window', '$q', '$document', function ($rootScope, $window, $q, $document) {
+        provider.$get = ['$rootScope','$window', '$q', '$document', '$interval', function ($rootScope, $window, $q, $document, $interval) {
             var deferred = $q.defer(), promise = deferred.promise, instances = {}, recaptcha;
 
             $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
@@ -142,6 +142,15 @@
             // Check if grecaptcha is not defined already.
             if (ng.isDefined($window.grecaptcha)) {
                 callback();
+            } else if ($document.find('script[src^="https://www.google.com/recaptcha/api.js"]').length) {
+                console.log('waiting for captcha');
+                // wait for script to be loaded.
+                var intervalWait = $interval(function() {
+                    if (ng.isDefined($window.grecaptcha)) {
+                        $interval.cancel(intervalWait);
+                        callback();
+                    }
+                }, 25);
             } else {
                 // Generate link on demand
                 var script = $window.document.createElement('script');
