@@ -1,5 +1,5 @@
 /**
- * @license angular-recaptcha build:2017-10-13
+ * @license angular-recaptcha build:2017-11-22
  * https://github.com/vividcortex/angular-recaptcha
  * Copyright (c) 2017 VividCortex
 **/
@@ -118,7 +118,7 @@
             provider.onLoadFunctionName = onLoadFunctionName;
         };
 
-        provider.$get = ['$rootScope','$window', '$q', '$document', function ($rootScope, $window, $q, $document) {
+        provider.$get = ['$rootScope','$window', '$q', '$document', '$interval', function ($rootScope, $window, $q, $document, $interval) {
             var deferred = $q.defer(), promise = deferred.promise, instances = {}, recaptcha;
 
             $window.vcRecaptchaApiLoadedCallback = $window.vcRecaptchaApiLoadedCallback || [];
@@ -156,6 +156,14 @@
             // Check if grecaptcha is not defined already.
             if (ng.isDefined($window.grecaptcha)) {
                 callback();
+            } else if ($window.document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
+                // wait for script to be loaded.
+                var intervalWait = $interval(function() {
+                    if (ng.isDefined($window.grecaptcha)) {
+                        $interval.cancel(intervalWait);
+                        callback();
+                    }
+                }, 25);
             } else {
                 // Generate link on demand
                 var script = $window.document.createElement('script');
