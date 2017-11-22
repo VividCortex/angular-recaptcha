@@ -90,6 +90,56 @@ describe('service', function () {
         });
     });
 
+    describe('without loaded api, with script tag', function () {
+        var createElement,
+            appendSpy,
+            funcName,
+            grecaptchaMock;
+
+        beforeEach(function () {
+            createElement = jasmine.createSpy('createElement');
+            appendSpy = jasmine.createSpy('appendSpy');
+
+            var doc = [{
+                createElement: createElement,
+                querySelector: function() {
+                    return {};
+                }
+            }];
+            doc.find = function () {
+                return [{
+                    appendChild: appendSpy
+                }];
+            };
+
+            driver
+                .given.onLoadFunctionName(funcName = 'my-func')
+                .given.mockDocument(doc)
+                .when.created();
+        });
+
+        it('should not add script tag to body', function () {
+            expect(createElement).not.toHaveBeenCalled();
+        });
+
+        it('should validate that recaptcha is not loaded', function () {
+            expect(driver.service.reload).toThrowError('reCaptcha has not been loaded yet.');
+        });
+
+        it('should validate that recaptcha is loaded after script is loaded', function () {
+            driver
+                .given.apiLoaded(grecaptchaMock = jasmine.createSpyObj('grecaptcha', ['render', 'getResponse', 'reset','execute']));
+
+            driver.$interval.flush(25);
+
+            var _widgetId = 123;
+
+            driver.service.execute(_widgetId);
+
+            expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId);
+        });
+    });
+
     describe('without loaded api', function () {
         var scriptTagSpy,
             appendSpy,
@@ -99,24 +149,24 @@ describe('service', function () {
             scriptTagSpy = jasmine.createSpy('scriptTagSpy');
             appendSpy = jasmine.createSpy('appendSpy');
 
+            var doc = [{
+                createElement: function () {
+                    return scriptTagSpy;
+                },
+                querySelector: function() {
+                    return null;
+                }
+            }];
+            doc.find = function () {
+                return [{
+                    appendChild: appendSpy
+                }];
+            };
+
             driver
                 .given.onLoadFunctionName(funcName = 'my-func')
-                .given.mockDocument({
-                    find: function () {
-                        return [{
-                            appendChild: appendSpy
-                        }];
-                    }
-                })
-                .given.mockWindow({
-                    document: {
-                        createElement: function () {
-                            return scriptTagSpy;
-                        }
-                    }
-                })
+                .given.mockDocument(doc)
                 .when.created();
-
         });
 
         it('should add script tag to body', function () {
