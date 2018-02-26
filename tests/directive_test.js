@@ -36,20 +36,6 @@ describe('directive: vcRecaptcha', function () {
             elementHtml     = '<div vc-recaptcha></div>';
             expectedMessage = 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
         });
-
-        it('should throw an error - key length is not 40 caracters long', function () {
-            elementHtml     = '<div vc-recaptcha key="key"></div>';
-            expectedMessage = 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
-
-            $scope.key = 'abc';
-        });
-
-        it('should throw an error - key length is not 40 caracters long - key changed', function () {
-            elementHtml     = '<div vc-recaptcha key="key"></div>';
-            expectedMessage = 'You need to set the "key" attribute to your public reCaptcha key. If you don\'t have a key, please get one from https://www.google.com/recaptcha/admin/create';
-
-            $scope.key = 'abc1';
-        });
     });
 
     describe('widgetId', function () {
