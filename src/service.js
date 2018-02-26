@@ -178,7 +178,7 @@
                     conf.hl = conf.lang || config.lang;
                     conf.badge = conf.badge || config.badge;
 
-                    if (!conf.sitekey || conf.sitekey.length !== 40) {
+                    if (!conf.sitekey) {
                         throwNoKeyException();
                     }
                     return getRecaptcha().then(function (recaptcha) {
