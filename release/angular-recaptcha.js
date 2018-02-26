@@ -1,7 +1,7 @@
 /**
- * @license angular-recaptcha build:2017-11-22
+ * @license angular-recaptcha build:2018-02-26
  * https://github.com/vividcortex/angular-recaptcha
- * Copyright (c) 2017 VividCortex
+ * Copyright (c) 2018 VividCortex
 **/
 
 /*global angular, Recaptcha */
@@ -192,7 +192,7 @@
                     conf.hl = conf.lang || config.lang;
                     conf.badge = conf.badge || config.badge;
 
-                    if (!conf.sitekey || conf.sitekey.length !== 40) {
+                    if (!conf.sitekey) {
                         throwNoKeyException();
                     }
                     return getRecaptcha().then(function (recaptcha) {
