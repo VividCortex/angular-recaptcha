@@ -139,8 +139,8 @@
             }
 
 
-            // Check if grecaptcha is not defined already.
-            if (ng.isDefined($window.grecaptcha)) {
+            // Check if grecaptcha.render is not defined already.
+            if (ng.isFunction(($window.grecaptcha || {}).render)) {
                 callback();
             } else if ($window.document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
                 // wait for script to be loaded.
