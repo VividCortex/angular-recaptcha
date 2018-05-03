@@ -1,5 +1,5 @@
 /**
- * @license angular-recaptcha build:2018-02-26
+ * @license angular-recaptcha build:2018-05-03
  * https://github.com/vividcortex/angular-recaptcha
  * Copyright (c) 2018 VividCortex
 **/
@@ -153,8 +153,8 @@
             }
 
 
-            // Check if grecaptcha is not defined already.
-            if (ng.isDefined($window.grecaptcha)) {
+            // Check if grecaptcha.render is not defined already.
+            if (ng.isFunction(($window.grecaptcha || {}).render)) {
                 callback();
             } else if ($window.document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
                 // wait for script to be loaded.
