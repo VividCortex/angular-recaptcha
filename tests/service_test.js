@@ -90,6 +90,35 @@ describe('service', function () {
         });
     });
 
+    // Regresion test for https://git.io/vp2SO
+    describe('without loaded api, loaded grecaptcha from cache without render func', () => {
+        const grecaptchaMock = {};
+        const _key = '1234567890123456789012345678901234567890';
+
+        beforeEach(function () {
+            const doc = [{
+                querySelector: () => ({}),
+            }];
+
+            driver
+                .given.apiLoaded(grecaptchaMock)
+                .given.mockDocument(doc)
+                .when.created();
+        });
+
+        it('should not try to render recaptcha', () => {
+            const spy = jasmine.createSpy('recaptchaCreate');
+
+            driver.service.create('<div></div>', {
+                key: _key,
+                callback: spy
+            });
+
+            expect(() => driver.applyChanges()).not.toThrow();
+            expect(spy).not.toHaveBeenCalled();
+        });
+    });
+
     describe('without loaded api, with script tag', function () {
         var createElement,
             appendSpy,
