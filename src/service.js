@@ -145,7 +145,7 @@
             } else if ($window.document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
                 // wait for script to be loaded.
                 var intervalWait = $interval(function() {
-                    if (ng.isDefined($window.grecaptcha)) {
+                    if (ng.isFunction(($window.grecaptcha || {}).render)) {
                         $interval.cancel(intervalWait);
                         callback();
                     }
