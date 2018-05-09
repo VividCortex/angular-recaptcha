@@ -167,6 +167,13 @@ describe('service', function () {
 
             expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId);
         });
+
+        it('should not proceed if render function not available in grecaptcha', function () {
+            driver.given.apiLoaded(grecaptchaMock = jasmine.createSpyObj('grecaptcha', ['reset']));
+            driver.$interval.flush(25);
+
+            expect(() => driver.service.execute(123)).toThrowError('reCaptcha has not been loaded yet.');
+        });
     });
 
     describe('without loaded api', function () {
