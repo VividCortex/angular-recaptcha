@@ -1,5 +1,5 @@
 /**
- * @license angular-recaptcha build:2018-05-03
+ * @license angular-recaptcha build:2018-05-09
  * https://github.com/vividcortex/angular-recaptcha
  * Copyright (c) 2018 VividCortex
 **/
@@ -152,14 +152,18 @@
                 }
             }
 
+            function isRenderFunctionAvailable() {
+                return ng.isFunction(($window.grecaptcha || {}).render);
+            }
+
 
             // Check if grecaptcha.render is not defined already.
-            if (ng.isFunction(($window.grecaptcha || {}).render)) {
+            if (isRenderFunctionAvailable()) {
                 callback();
             } else if ($window.document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
                 // wait for script to be loaded.
                 var intervalWait = $interval(function() {
-                    if (ng.isDefined($window.grecaptcha)) {
+                    if (isRenderFunctionAvailable()) {
                         $interval.cancel(intervalWait);
                         callback();
                     }
