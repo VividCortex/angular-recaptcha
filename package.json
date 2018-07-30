@@ -1,6 +1,6 @@
 {
   "name": "angular-recaptcha",
-  "version": "4.1.5",
+  "version": "4.2.0",
   "description": "An AngularJS module to ease usage of reCaptcha inside a form",
   "author": "VividCortex",
   "license": "MIT",
