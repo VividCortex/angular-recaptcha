@@ -1,5 +1,5 @@
 /**
- * @license angular-recaptcha build:2018-05-09
+ * @license angular-recaptcha build:2018-07-30
  * https://github.com/vividcortex/angular-recaptcha
  * Copyright (c) 2018 VividCortex
 **/
@@ -317,7 +317,8 @@
                 required: '=?',
                 onCreate: '&',
                 onSuccess: '&',
-                onExpire: '&'
+                onExpire: '&',
+                onError: '&'
             },
             link: function (scope, elm, attrs, ctrl) {
                 scope.widgetId = null;
@@ -349,7 +350,8 @@
                         tabindex: scope.tabindex || attrs.tabindex || null,
                         size: scope.size || attrs.size || null,
                         badge: scope.badge || attrs.badge || null,
-                        'expired-callback': expired
+                        'expired-callback': expired,
+                        'error-callback': attrs.onError ? error : undefined
 
                     }).then(function (widgetId) {
                         // The widget has been created
@@ -389,6 +391,17 @@
 
                         // Notify about the response availability
                         scope.onExpire({ widgetId: scope.widgetId });
+                    });
+                }
+                
+                function error() {
+                    var args = arguments;
+                    $timeout(function () {
+                        scope.response = "";
+                        validate();
+
+                        // Notify about the response availability
+                        scope.onError({ widgetId: scope.widgetId, arguments: args });
                     });
                 }
 
