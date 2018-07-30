@@ -58,6 +58,7 @@ describe('directive: vcRecaptcha', function () {
             $scope.key       = VALID_KEY;
             $scope.onCreate  = jasmine.createSpy('onCreate');
             $scope.onSuccess = jasmine.createSpy('onSuccess');
+            $scope.onError = jasmine.createSpy('onError');
         });
 
         afterEach(function () {
@@ -171,6 +172,31 @@ describe('directive: vcRecaptcha', function () {
                 response: 'response from google',
                 widgetId: undefined
             });
+        });
+
+        it('should call the onError callback', function () {
+            var element     = angular.element('<form name="form">' +
+                    '<input type="text" ng-model="something" />' +
+                    '<div vc-recaptcha key="key" on-create="onCreate()" on-error="onError({arguments: args, widgetId: id})"/>' +
+                    '</form>'),
+
+                _fakeCreate = function (element, config) {
+                    config['error-callback']('something about the error');
+
+                    return {
+                        then: function (cb) {
+                            cb();
+                        }
+                    };
+                };
+
+            spyOn(vcRecaptchaService, 'create').and.callFake(_fakeCreate);
+
+            $compile(element)($scope);
+            $scope.$digest();
+            $timeout.flush();
+
+            expect($scope.onError).toHaveBeenCalled();
         });
 
         it('the widget should be using the setted language', function () {
