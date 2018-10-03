@@ -56,7 +56,7 @@
          * @param bool  Fixes https://github.com/google/recaptcha/issues/87 by enabling recaptcha globally
          *
          */
-        provider.enableGlobal = function(bool){
+        provider.setGlobal = function(bool){
             config.domain = bool && "https://recaptcha.net";
         };
 
