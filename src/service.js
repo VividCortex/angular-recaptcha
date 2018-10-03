@@ -15,6 +15,8 @@
         var provider = this;
         var config = {};
         provider.onLoadFunctionName = 'vcRecaptchaApiLoaded';
+        
+        config.domain = "https://www.google.com";
 
         /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
@@ -55,9 +57,7 @@
          *
          */
         provider.enableGlobal = function(bool){
-            config.domain = bool 
-                ? "https://recaptcha.net"
-                : "https://www.google.com" ;
+            config.domain = bool && "https://recaptcha.net";
         };
 
         /**
