@@ -1,11 +1,16 @@
 {
   "name": "angular-recaptcha",
   "version": "4.2.0",
-  "description": "An AngularJS module to ease usage of reCaptcha inside a form",
-  "author": "VividCortex",
+  "description": "An AngularJS module to use reCaptcha via the fallback www.recaptcha.net URL.",
+  "author": "Open Government Products",
   "license": "MIT",
-  "homepage": "https://github.com/vividcortex/angular-recaptcha",
+  "homepage": "https://github.com/opengovsg/angular-recaptcha",
   "contributors": [
+    {
+      "name": "Yuanruo Liang",
+      "email": "yuanruo@open.gov.sg",
+      "url": "https://github.com/opengovsg/angular-recaptcha"
+    },
     {
       "name": "Eduardo Daniel Cuomo",
       "email": "reduardo7@gmail.com",
