@@ -1,10 +1,13 @@
-AngularJS reCaptcha
+AngularJS reCaptcha fallback
 ===================
 
-[![Build Status](https://travis-ci.org/VividCortex/angular-recaptcha.svg?branch=master)](https://travis-ci.org/VividCortex/angular-recaptcha)
-[![Coverage Status](https://coveralls.io/repos/VividCortex/angular-recaptcha/badge.svg?branch=master)](https://coveralls.io/r/VividCortex/angular-recaptcha?branch=master)
-[![jsDelivr Hits](https://data.jsdelivr.com/v1/package/npm/angular-recaptcha/badge?style=rounded)](https://www.jsdelivr.com/package/npm/angular-recaptcha)
-![image](https://img.shields.io/npm/dm/angular-recaptcha.svg)
+Rationale
+---------
+
+This helps your AngularJS app with reCaptcha work in countries where www.google.com is blocked.
+
+[![Build Status](https://travis-ci.org/opengovsg/angular-recaptcha.svg?branch=master)](https://travis-ci.org/opengovsg/angular-recaptcha)
+![image](https://img.shields.io/npm/dm/angular-recaptcha-fallback.svg)
 
 Add a [reCaptcha](https://www.google.com/recaptcha/intro/index.html) to your [AngularJS](angularjs.org) project.
 
