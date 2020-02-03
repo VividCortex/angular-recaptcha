@@ -7,9 +7,9 @@
   "homepage": "https://github.com/vividcortex/angular-recaptcha",
   "contributors": [
     {
-      "name" : "Eduardo Daniel Cuomo",
-      "email" : "reduardo7@gmail.com",
-      "url" : "https://github.com/reduardo7/angular-recaptcha"
+      "name": "Eduardo Daniel Cuomo",
+      "email": "reduardo7@gmail.com",
+      "url": "https://github.com/reduardo7/angular-recaptcha"
     }
   ],
   "main": "index.js",
