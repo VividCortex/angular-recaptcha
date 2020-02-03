@@ -1,6 +1,6 @@
 {
   "name": "angular-recaptcha",
-  "version": "4.2.0",
+  "version": "4.2.1-0",
   "description": "An AngularJS module to use reCaptcha via the fallback www.recaptcha.net URL.",
   "author": "Open Government Products",
   "license": "MIT",
