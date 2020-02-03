@@ -146,7 +146,7 @@
             // Check if grecaptcha.render is not defined already.
             if (isRenderFunctionAvailable()) {
                 callback();
-            } else if ($window.document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
+            } else if ($window.document.querySelector('script[src^="https://www.recaptcha.net/recaptcha/api.js"]')) {
                 // wait for script to be loaded.
                 var intervalWait = $interval(function() {
                     if (isRenderFunctionAvailable()) {
@@ -159,7 +159,7 @@
                 var script = $window.document.createElement('script');
                 script.async = true;
                 script.defer = true;
-                script.src = 'https://www.google.com/recaptcha/api.js?onload='+provider.onLoadFunctionName+'&render=explicit';
+                script.src = 'https://www.recaptcha.net/recaptcha/api.js?onload='+provider.onLoadFunctionName+'&render=explicit';
                 $document.find('body')[0].appendChild(script);
             }
 
