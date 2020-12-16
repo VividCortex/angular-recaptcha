@@ -57,9 +57,9 @@ describe('service', function () {
         it('should call execute', function () {
             var _widgetId = 123;
 
-            driver.service.execute(_widgetId);
+            driver.service.execute(_widgetId, 'my-action');
 
-            expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId);
+            expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId, {action: 'my-action'});
         });
 
         it('should call getResponse', function () {
@@ -163,9 +163,9 @@ describe('service', function () {
 
             var _widgetId = 123;
 
-            driver.service.execute(_widgetId);
+            driver.service.execute(_widgetId, 'my-action');
 
-            expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId);
+            expect(grecaptchaMock.execute).toHaveBeenCalledWith(_widgetId, {action: 'my-action'});
         });
 
         it('should not proceed if render function not available in grecaptcha', function () {
