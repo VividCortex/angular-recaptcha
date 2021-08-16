@@ -1,3 +1,8 @@
+UNMAINTAINED
+============
+
+Please fork this repo if you are interested in continuing using it.
+
 AngularJS reCaptcha
 ===================
 
