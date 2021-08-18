@@ -15,6 +15,8 @@
         var provider = this;
         var config = {};
         provider.onLoadFunctionName = 'vcRecaptchaApiLoaded';
+        
+        config.domain = "https://www.google.com";
 
         /**
          * Sets the reCaptcha configuration values which will be used by default is not specified in a specific directive instance.
@@ -44,6 +46,18 @@
          */
         provider.setTheme = function(theme){
             config.theme = theme;
+        };
+        
+        /**
+         * Sets the reCaptcha domain to enable it to work globally.
+         * More info here https://developers.google.com/recaptcha/docs/faq
+         *
+         * @since 2.5.0
+         * @param bool  Fixes https://github.com/google/recaptcha/issues/87 by enabling recaptcha globally
+         *
+         */
+        provider.setGlobal = function(bool){
+            config.domain = bool && "https://recaptcha.net";
         };
 
         /**
@@ -146,7 +160,7 @@
             // Check if grecaptcha.render is not defined already.
             if (isRenderFunctionAvailable()) {
                 callback();
-            } else if ($window.document.querySelector('script[src^="https://www.google.com/recaptcha/api.js"]')) {
+            } else if ($window.document.querySelector('script[src^="'+config.domain+'/recaptcha/api.js"]')) {
                 // wait for script to be loaded.
                 var intervalWait = $interval(function() {
                     if (isRenderFunctionAvailable()) {
@@ -159,7 +173,7 @@
                 var script = $window.document.createElement('script');
                 script.async = true;
                 script.defer = true;
-                script.src = 'https://www.google.com/recaptcha/api.js?onload='+provider.onLoadFunctionName+'&render=explicit';
+                script.src = config.domain+'/recaptcha/api.js?onload='+provider.onLoadFunctionName+'&render=explicit';
                 $document.find('body')[0].appendChild(script);
             }
 
