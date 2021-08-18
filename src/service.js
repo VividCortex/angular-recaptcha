@@ -206,11 +206,13 @@
 
                 /**
                  * Executes the reCaptcha
+                 * @param widgetId
+                 * @param [action] the action for reCAPTCHA v3
                  */
-                execute: function (widgetId) {
+                execute: function (widgetId, action) {
                     validateRecaptchaInstance();
 
-                    recaptcha.execute(widgetId);
+                    recaptcha.execute(widgetId, {action: action});
                 },
 
                 /**
